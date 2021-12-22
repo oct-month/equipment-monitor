@@ -1,24 +1,5 @@
-# hello-vue
+# 装备健康监测平台
 
-## Project setup
-```
-npm install
-```
+## 项目框架
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+https://www.processon.com/view/link/61a9dbd5f346fb733cd80d02#map

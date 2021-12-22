@@ -1,6 +1,5 @@
 module.exports = {
     publicPath: './',
-    outDir: 'dist',
     filenameHashing: true,
     devServer: {
         host: '127.0.0.1',
@@ -19,7 +18,7 @@ module.exports = {
                 // }
             }
         },
-        before: app => {
+        before: (app) => {
             // app express实例
         },
         after: () => {

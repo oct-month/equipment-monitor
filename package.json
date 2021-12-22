@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "element-ui": "^2.15.6",
     "vue": "^2.6.11",
     "vue-echarts": "^6.0.0",
     "vue-router": "^3.2.0",
@@ -21,8 +22,10 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "cross-env": "^7.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "sass-loader": "^12.4.0",
     "vue-template-compiler": "^2.6.11"
   }
 }

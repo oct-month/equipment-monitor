@@ -1,0 +1,43 @@
+db                  // 当前数据库
+db.getName()        // 当前库名
+db.version()        // 数据库版本
+show dbs            // 所有数据库
+use $DBNAME         // 创建并切换数据库
+db.stats()          // 数据库状态
+db.getMongo()       // 当前链接地址
+db.dropDatabase()   // 删除当前数据库
+
+db.createCollection("$collName", {size: 20, capped: true, max: 100})    // 创建集合
+db.$collName.isCapped()                                                 // 判断集合是否定容量
+db.getCollection("$collName")                                           // 得到指定名称的集合
+db.getCollectionNames()                                                 // 得到当前所有集合
+db.printCollectionStats()                                               // 显示当前所有集合状态
+
+db.$collName.insert({name: "sugar", song: "Maroon"})  // 插入一条文档
+db.$collName.insert([{name: "你好", song: '周'}, {name: "爱", song: "小虎队"}])
+
+db.$collName.find()                                 // 查询所有
+db.$collName.distinct('name')                       // 去重
+db.$collName.find({year: 1998})                     // year=1998
+db.$collName.find({year: {$gt: 1000}})              // year > 1000
+db.$collName.find({year: {$lt: 1999}})              // year < 1999
+db.$collName.find({year: {$gte: 1998}})             // year >= 1998
+db.$collName.find({year: {$lte: 1998}})             // year <= 1998
+db.$collName.find({year: {$gte: 1990, $lte: 2000}}) // 1990 <= year <= 2000
+db.$collName.find({name: /^sugar.*?$/})             // 正则查询
+db.$collName.find({}, {_id: 0, name: 1, year: 1})   // 指定列
+db.$collName.find({name: /sugar/}).sort({name: -1}) // 按name降序
+db.$collName.find({name: /sugar/}).sort({name: 1})  // 按name升序
+db.$collName.find({name: /sugar/}).limit(2)         // 前2条数据
+db.$collName.find({name: /sugar/}).skip(1).limit(2) // 取2~3
+db.$collName.find({$or: [{name: /sugar/}, {name: /好/}]})   // or查询
+db.$collName.findOne()                              // 第一条数据
+db.$collName.find().count()                         // 计数
+
+// update $collName set name='好', song='abcdef' where name='你好';
+db.$collName.update({name: "你好"}, {$set: {name: "好", song: 'abcdef'}})
+// update $collName set year=year-10 where name='sugar3';
+db.$collName.update({name: 'sugar3'}, {$inc: {year: -10}})
+// delete from $collName where name='sugar3';
+db.$collName.remove({name: 'sugar3'})
+

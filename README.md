@@ -2,8 +2,8 @@
 
 ## 开发
 
-- 前端使用 `vue`
-- 后端使用 `express`
+- 前端 `equipment-front` 使用 `vue`
+- 后端 `equipment-back` 使用 `express`
 
 ## 项目框架
 

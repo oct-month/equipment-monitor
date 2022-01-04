@@ -11,14 +11,14 @@ const logger = require('./logger')
 function generatorToken(payload) {
     return jwt.sign(payload, privateKey, {
         algorithm: 'RS256',
-        expiresIn: '7d'     // 7天过期
+        expiresIn: '7d'     // 7天过期 TODO 设置定期更新
     })
 }
 
 /**
  * 验证Token
  * @param {String} token 
- * @returns {Object|null} 原payload
+ * @returns {?Object} 原payload
  */
 function verifyToken(token) {
     if (token) {

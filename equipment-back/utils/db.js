@@ -27,7 +27,7 @@ function isClientConnected() {
 /**
  * 获取collection的操作对象
  * @param {String} collectionName collection名
- * @returns {Collection} collection的操作对象
+ * @returns {Promise<Collection>} collection的操作对象
  */
 async function getCollectionClient(collectionName) {
     if (connected) {

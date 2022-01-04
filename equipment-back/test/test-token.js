@@ -1,4 +1,4 @@
-const { generatorToken, verifyToken } = require('../utils/login')
+const { generatorToken, verifyToken } = require('../utils/token')
 
 var tk = generatorToken({
     username: 'sun',

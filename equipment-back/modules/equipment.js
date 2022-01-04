@@ -2,18 +2,29 @@ class Equipment {
     /**
      * 装备信息
      * @constructor
-     * @param {String} _id 
-     * @param {String} name 名称
-     * @param {String} image 图片路径
-     * @param {String} info 描述信息
-     * @param {String} token 用于设备与平台通信的token
+     * @param {{?_id: String, ?name: String, ?image: String, ?info: String, ?token: String}} obj 
      */
-    constructor(_id, name, image, info, token) {
-        this._id = _id
-        this.name = name
-        this.image = image
-        this.info = info
-        this.token = token
+    constructor(obj = {}) {
+        /**
+         * @type {String}
+         */
+        this._id = (obj._id || '').toString()
+        /**
+         * @type {String} 名称
+         */
+        this.name = obj.name || ''
+        /**
+         * @type {String} 图片路径
+         */
+        this.image = obj.image || ''
+        /**
+         * @type {String} 描述信息
+         */
+        this.info = obj.info || ''
+        /**
+         * @type {String} 用于设备与平台通信的token
+         */
+        this.token = obj.token || ''
     }
 
     withoutId() {
@@ -22,6 +33,13 @@ class Equipment {
             image: this.image,
             info: this.info,
             token: this.token
+        }
+    }
+
+    payload() {
+        return {
+            _id: this._id,
+            name: this.name
         }
     }
 }

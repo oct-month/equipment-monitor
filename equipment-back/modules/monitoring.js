@@ -2,16 +2,33 @@ class Monitoring {
     /**
      * 装备监测信息
      * @constructor
-     * @param {String} _id 
-     * @param {String} equip_id 装备id
-     * @param {Date} time 信息生成时间
-     * @param {Object} content 监测信息
+     * @param {{?_id: String, ?equip_id: String, ?time: Date, ?content: Object}} obj 
      */
-    constructor(_id, equip_id, time, content) {
-        this._id = _id
-        this.equip_id = equip_id
-        this.time = time
-        this.content = content
+    constructor(obj = {}) {
+        /**
+         * @type {String}
+         */
+        this._id = obj._id || ''
+        /**
+         * @type {String} 装备id
+         */
+        this.equip_id = obj.equip_id || ''
+        /**
+         * @type {Date} 信息生成时间
+         */
+        this.time = obj.time || new Date()
+        /**
+         * @type {Object} 监测信息
+         */
+        this.content = obj.content || {}
+    }
+
+    withoutId() {
+        return {
+            equip_id: this.equip_id,
+            time: this.time,
+            content: this.content
+        }
     }
 }
 

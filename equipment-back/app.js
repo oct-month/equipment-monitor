@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 
 const logger = require('./utils/logger')
-const { server } = require('./config')
+const config = require('./config')
 const router = require('./route')
 
 var denv = dotenv.config({
@@ -40,6 +40,6 @@ app.set('view engine', 'art')
 app.use('/', router)
 
 
-app.listen(server.port, () => {
-    logger.debug(`Server start on http://${server.hostname}:${server.port}`)
+app.listen(config.serverPort, () => {
+    logger.debug(`Server start on http://127.0.01:${config.serverPort}`)
 })

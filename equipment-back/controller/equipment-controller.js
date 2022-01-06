@@ -36,6 +36,7 @@ async function postEquipment(req, res, next) {
     var image = ''  // TODO 图床服务
     var equip = new Equipment({
         name: req.body['name'],
+        image: req.body['image'],
         info: req.body['info'],
     })
     equip._id = await equipmentDAO.insertOneEquipment(equip)

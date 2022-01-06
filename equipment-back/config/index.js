@@ -7,10 +7,7 @@ module.exports = {
     // 数据库名称
     dbName: 'monitor',
     // 服务端口
-    server: {
-        hostname: 'localhost',
-        port: 8080
-    },
+    serverPort: 8081,
     privateKey: fs.readFileSync(path.join(__dirname, '../keys/rsa_private_key.pem'), 'utf-8') ,
     publicKey: fs.readFileSync(path.join(__dirname, '../keys/rsa_public_key.pem'), 'utf-8')
 }

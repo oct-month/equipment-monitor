@@ -2,25 +2,33 @@
   <a-layout id="app">
     <a-layout-sider id="sider">
       <div class="logo">
-        <img class="img-responsive center-block" height="30px" src="./assets/logo.png" alt="logo" srcset="">
+        <img class="img-responsive center-block" height="28px" src="./assets/logo.png" alt="logo" srcset="">
         <span class="text-center text-success">装备健康监测系统</span>
       </div>
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
         <a-menu-item key="1">
-          <a-icon type="home" />
-          <span class="nav-text"><router-link class="text-white" to="/">装备信息</router-link></span>
+          <router-link class="text-white" to="/equipment">
+            <a-icon type="home" />
+            <span class="nav-text">装备信息</span>
+          </router-link>
         </a-menu-item>
         <a-menu-item key="2">
-          <a-icon type="bar-chart" />
-          <span class="nav-text"><router-link class="text-white" to="/">监测信息</router-link></span>
+          <router-link class="text-white" to="/">
+            <a-icon type="bar-chart" />
+            <span class="nav-text">监测信息</span>
+          </router-link>
         </a-menu-item>
         <a-menu-item key="3">
-          <a-icon type="environment" />
-          <span class="nav-text"><router-link class="text-white" to="/">装备定位</router-link></span>
+          <router-link class="text-white" to="/">
+            <a-icon type="environment" />
+            <span class="nav-text">装备定位</span>
+          </router-link>
         </a-menu-item>
         <a-menu-item key="4">
-          <a-icon type="alert" />
-          <span class="nav-text"><router-link class="text-white" to="/">健康预警</router-link></span>
+          <router-link class="text-white" to="/">
+            <a-icon type="alert" />
+            <span class="nav-text">健康预警</span>
+          </router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>

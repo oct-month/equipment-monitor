@@ -33,7 +33,6 @@ async function getEquipment(req, res, next) {
  * @param {NextFunction} next 
  */
 async function postEquipment(req, res, next) {
-    var image = ''  // TODO 图床服务
     var equip = new Equipment({
         name: req.body['name'],
         image: req.body['image'],

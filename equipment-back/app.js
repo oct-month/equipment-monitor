@@ -7,6 +7,7 @@ const logger = require('./utils/logger')
 const config = require('./config')
 const router = require('./route')
 
+
 var denv = dotenv.config({
     path: './.env',
     encoding: 'utf8'
@@ -36,6 +37,28 @@ app.set('view options', {
 })
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'art')
+
+// 解析querystring #临时 TODO
+app.use('/', (req, res, next) => {
+    var dtstr = req.query['data']
+    if (dtstr) {
+        try {
+            var data = JSON.parse(dtstr)
+            Object.assign(req.body, data)
+        }
+        catch (err) {
+            logger.error(err)
+        }
+    }
+    next()
+})
+
+// 跨域
+app.use('/', (req, res, next) => {
+    res.header('Access-Control-Allow-Headers', 'Content-Type')
+    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8080')
+    next()
+})
 
 app.use('/', router)
 

@@ -1,5 +1,5 @@
 const path = require('path')
-const dotenv = require('dotenv')
+// const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
 const express = require('express')
 
@@ -8,14 +8,14 @@ const config = require('./config')
 const router = require('./route')
 
 
-var denv = dotenv.config({
-    path: './.env',
-    encoding: 'utf8'
-})
-if (denv.error) {
-    throw denv.error
-}
-logger.debug('load env', denv.parsed)
+// var denv = dotenv.config({
+//     path: './.env',
+//     encoding: 'utf8'
+// })
+// if (denv.error) {
+//     throw denv.error
+// }
+// logger.debug('load env', denv.parsed)
 
 
 const app = express()
@@ -54,11 +54,13 @@ app.use('/', (req, res, next) => {
 })
 
 // 跨域
-app.use('/', (req, res, next) => {
-    res.header('Access-Control-Allow-Headers', 'Content-Type')
-    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8080')
-    next()
-})
+if (process.env.NODE_ENV !== 'product') {
+    app.use('/', (req, res, next) => {
+        res.header('Access-Control-Allow-Headers', 'Content-Type')
+        res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8080')
+        next()
+    })
+}
 
 app.use('/', router)
 

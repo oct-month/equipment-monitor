@@ -3,7 +3,7 @@ const fs = require('fs')
 
 module.exports = {
     // 数据库URL
-    dbUrl: 'mongodb://127.0.0.1:27017',
+    dbUrl: process.env.NODE_ENV === 'product' ? 'mongodb://equipment-mongodb:27017' : 'mongodb://127.0.0.1:27017',
     // 数据库名称
     dbName: 'monitor',
     // 服务端口

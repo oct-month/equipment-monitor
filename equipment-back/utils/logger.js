@@ -5,11 +5,14 @@ log4js.configure({
         monitor: {
             type: 'file',
             filename: 'logs/monitor.log'
+        },
+        console: {
+            type: 'console'
         }
     },
     categories: {
         default: {
-            appenders: ['monitor'],
+            appenders: ['monitor', 'console'],
             level: 'debug'
         }
     }

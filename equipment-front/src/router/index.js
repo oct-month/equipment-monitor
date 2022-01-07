@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 
 import Home from '@/views/Home.vue'
 import EquipmentInfo from '@/views/EquipmentInfo.vue'
+import Monitoring from '@/views/Monitoring.vue'
+import Location from '@/views/Location.vue'
 
 Vue.use(VueRouter)
 
@@ -18,6 +20,16 @@ const routes = [
     component: EquipmentInfo
   },
   {
+    path: '/monitoring',
+    name: 'Monitoring',
+    component: Monitoring
+  },
+  {
+    path: '/location',
+    name: 'Location',
+    component: Location
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting
@@ -29,7 +41,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
-  base: process.env.BASE_URL,
+  base: process.env.VUE_APP_URL,
   routes
 })
 

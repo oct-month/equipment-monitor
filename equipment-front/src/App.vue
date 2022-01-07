@@ -2,7 +2,7 @@
   <a-layout id="app">
     <a-layout-sider id="sider">
       <div class="logo">
-        <img class="img-responsive center-block" height="28px" src="./assets/logo.png" alt="logo" srcset="">
+        <img class="img-responsive center-block" height="24px" src="./assets/logo.png" alt="logo" srcset="">
         <span class="text-center text-success">装备健康监测系统</span>
       </div>
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
@@ -13,13 +13,13 @@
           </router-link>
         </a-menu-item>
         <a-menu-item key="2">
-          <router-link class="text-white" to="/">
+          <router-link class="text-white" to="/monitoring">
             <a-icon type="bar-chart" />
             <span class="nav-text">监测信息</span>
           </router-link>
         </a-menu-item>
         <a-menu-item key="3">
-          <router-link class="text-white" to="/">
+          <router-link class="text-white" to="/location">
             <a-icon type="environment" />
             <span class="nav-text">装备定位</span>
           </router-link>
@@ -34,7 +34,7 @@
     </a-layout-sider>
 
     <a-layout id="content">
-      <a-layout-header id="content-header"/>
+      <!-- <a-layout-header id="content-header"/> -->
       <a-layout-content id="content-body">
         <div :style="{ padding: '24px', background: '#fff', textAlign: 'center' }">
           <router-view/>

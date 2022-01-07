@@ -1,47 +1,52 @@
 <template>
-  <div class="info">
-    <a-form :form="form" :label-col="{ span: 5}" :wrapper-col="{ span: 12 }" @submit="handleSubmit">
-      <a-form-item label="名称">
-        <a-input name="name" placeholder="装备名称" v-decorator="['note', { rules: [{required: true, message: '需要名称'}]}]"/>
-      </a-form-item>
-      <a-form-item label="描述">
-        <a-textarea name="info" placeholder="装备描述信息" :rows="4"/>
-      </a-form-item>
-      <a-form-item label="图片">
-        <a-upload
-          action="http://127.0.0.1:8082/api/image"
-          name="upload"
-          list-type="picture-card"
-          class="avatar-uploader"
-          :default-file-list="fileList"
-          :multiple="false"
-          :show-upload-list="true"
-          :before-upload="beforeUpload"
-          @change="handleChange"
-        >
-          <div v-if="!fileList.length">
-            <a-icon :type="loading?'loading':'plus'"/>
-            <div class="ant-upload-text">Upload</div>
-          </div>
-        </a-upload>
-      </a-form-item>
-      <a-form-item :wrapper-col="{ span: 12, offset: 0 }">
-        <a-button type="primary" html-type="submit">
-          Submit
-        </a-button>
-      </a-form-item>
-    </a-form>
+  <div>
+    <a-row class="bg-light mb-2">
+      <a-col :span="24">
+        <a-form class="mt-2" :form="form" :label-col="{ span: 1 }" :wrapper-col="{ span: 10 }" @submit="handleSubmit">
+          <!-- <a-form-item label="上传"></a-form-item> -->
+          <a-form-item label="名称">
+            <a-input name="name" placeholder="装备名称" v-decorator="['name', { rules: [{required: true, message: '需要名称'}]}]"/>
+          </a-form-item>
+          <a-form-item label="描述">
+            <a-textarea name="info" placeholder="装备描述信息" :rows="4" v-decorator="['info', { rules: [{required: false, message: '需要描述信息'}]}]"/>
+          </a-form-item>
+          <a-form-item label="图片">
+            <a-upload
+              :action="config.imageBaseUrl+'/api/image'"
+              name="upload"
+              list-type="picture-card"
+              class="avatar-uploader"
+              :default-file-list="fileList"
+              :multiple="false"
+              :show-upload-list="true"
+              :before-upload="beforeUpload"
+              @change="handleChange"
+            >
+              <div v-if="!fileList.length">
+                <a-icon :type="loading?'loading':'plus'"/>
+                <div class="ant-upload-text">Upload</div>
+              </div>
+            </a-upload>
+          </a-form-item>
+          <a-form-item :wrapper-col="{ span: 1, offset: 1 }">
+            <a-button type="primary" html-type="submit">
+              Submit
+            </a-button>
+          </a-form-item>
+        </a-form>
+      </a-col>
+    </a-row>
 
     <b-card-group columns>
       <b-card
         v-for="equip in equipments"
         :key="equip._id"
         :title="equip.name"
-        :img-src="'http://127.0.0.1:8082/uploads/'+equip.image"
+        :img-src="config.imageBaseUrl+'/uploads/'+equip.image"
         :img-alt="equip.name"
         img-top
         class="mb-2"
-        style="max-width: 20rem; display: inline-block"
+        style="max-width: 20rem; display: inline-flex"
       >
         <b-card-text>{{ equip.info }}</b-card-text>
       </b-card>
@@ -49,7 +54,7 @@
 
     <!-- <a-card bordered hoverable style="max-width: 20rem; display: inline-block;" v-for="equip in equipments" :key="equip._id" class="mb-2">
       <img
-        :src="'http://127.0.0.1:8082/uploads/'+equip.image"
+        :src="config.imageBaseUrl+'/uploads/'+equip.image"
         :alt="equip.name"
         slot="cover"
       />
@@ -61,10 +66,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
+
+import config from '@/config'
 
 export default {
-  name: "EquipmentInfo",
+  name: 'EquipmentInfo',
   data() {
     return {
       formLayout: 'horizontal',
@@ -74,19 +81,49 @@ export default {
       fileList: [],
       imgPath: '',
       loading: false,
-      equipments: []
+      equipments: [],
+      config: config
     };
   },
   methods: {
     handleSubmit(e) {
-      // TODO 提交表单
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (err) {
           console.error(err)
         }
+        else if (this.imgPath) {
+          values['image'] = this.imgPath
+          axios({
+            method: 'POST',
+            url: '/api/equipment',
+            baseURL: this.config.backBaseUrl,
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: values,
+            withCredentials: false,
+            responseType: 'json'
+          })
+            .then((res) => {
+              let _id = res.data['_id']
+              // let token = res.data['token'] TODO token处理
+              let name = values['name']
+              let info = values['info']
+              let image = values['image']
+              this.equipments.unshift({
+                _id,
+                name,
+                info,
+                image
+              })
+            })
+            .catch((err) => {
+              console.error(err)
+            })
+        }
         else {
-          console.log(values)
+          this.$message.error('请上传图片')
         }
       })
     },
@@ -123,28 +160,27 @@ export default {
     }
   },
   created() {
-    var that = this
-    axios
-      .get("/api/equipment", {
-        baseURL: 'http://127.0.0.1:8081',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        params: {
-          data: JSON.stringify({
-            pagesize: 100,
-            pageindex: 0
-          })
-        },
-        withCredentials: false,
-        responseType: "json"
-      })
-      .then((res) => {
-        that.equipments = res.data['data']
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    axios.get('/api/equipment', {
+      baseURL: this.config.backBaseUrl,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      params: {
+        data: JSON.stringify({
+          pagesize: 100,
+          pageindex: 0
+        })
+      },
+      withCredentials: false,
+      responseType: 'json'
+    })
+    .then((res) => {
+      this.equipments = res.data['data']
+      console.log(this.equipments)
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   },
 };
 </script>

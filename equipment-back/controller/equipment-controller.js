@@ -19,6 +19,10 @@ async function getEquipment(req, res, next) {
     var resBody = {}
     if (pageSize > 0 && pageIndex >= 0) {
         resBody['data'] = await equipmentDAO.findManyEquipment(pageSize, pageIndex)
+        resBody['data'].forEach((value, idx, array) => {
+            array[idx] = value.withoutToken()
+        })
+        resBody['data'].reverse()
     }
     if (countFlag) {
         resBody['count'] = await equipmentDAO.countEquipment()

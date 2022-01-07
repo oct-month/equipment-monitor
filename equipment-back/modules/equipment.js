@@ -36,6 +36,15 @@ class Equipment {
         }
     }
 
+    withoutToken() {
+        return {
+            _id: this._id,
+            name: this.name,
+            image: this.image,
+            info: this.info
+        }
+    }
+
     payload() {
         return {
             _id: this._id,

@@ -2,8 +2,9 @@
 
 ## 开发
 
-- 前端 `equipment-front` 使用 `vue`
-- 后端 `equipment-back` 使用 `express`
+- 前端 `equipment-front` 使用 `vue` + `bootstrap` + `ant-design`
+- 后端 `equipment-back` 使用 `express` + `mongodb`
+- 图床 `equipment-image` 使用 `express` + `multer`
 
 ## 项目框架
 

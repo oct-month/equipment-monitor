@@ -46,7 +46,7 @@
         :img-alt="equip.name"
         img-top
         class="mb-2"
-        style="max-width: 20rem; display: inline-flex"
+        style="max-width: 20rem; display: inline-block"
       >
         <b-card-text>{{ equip.info }}</b-card-text>
       </b-card>

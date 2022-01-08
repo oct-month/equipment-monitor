@@ -117,6 +117,11 @@ export default {
                 info,
                 image
               })
+              // 清空表单
+              this.form.clearField('name')
+              this.form.clearField('info')
+              this.fileList = []
+              this.imgPath = ''
             })
             .catch((err) => {
               console.error(err)

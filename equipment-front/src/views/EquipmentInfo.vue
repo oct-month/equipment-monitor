@@ -118,8 +118,7 @@ export default {
                 image
               })
               // 清空表单
-              this.form.clearField('name')
-              this.form.clearField('info')
+              this.form.resetFields()
               this.fileList = []
               this.imgPath = ''
             })

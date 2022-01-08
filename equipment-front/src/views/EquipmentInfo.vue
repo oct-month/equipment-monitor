@@ -16,9 +16,9 @@
               name="upload"
               list-type="picture-card"
               class="avatar-uploader"
-              :default-file-list="fileList"
+              :file-list="fileList"
               :multiple="false"
-              :show-upload-list="true"
+              :show-upload-list="{ showPreviewIcon: true, showRemoveIcon: true }"
               :before-upload="beforeUpload"
               @change="handleChange"
             >

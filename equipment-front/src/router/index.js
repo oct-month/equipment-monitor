@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import Home from '@/views/Home.vue'
 import EquipmentInfo from '@/views/EquipmentInfo.vue'
+import Platform from '@/views/Platform.vue'
 import Monitoring from '@/views/Monitoring.vue'
 import Location from '@/views/Location.vue'
 
@@ -18,6 +19,11 @@ const routes = [
     path: '/equipment',
     name: 'EquipmentInfo',
     component: EquipmentInfo
+  },
+  {
+    path: '/platform',
+    name: 'Platform',
+    component: Platform
   },
   {
     path: '/monitoring',

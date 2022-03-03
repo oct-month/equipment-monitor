@@ -13,6 +13,12 @@
           </router-link>
         </a-menu-item>
         <a-menu-item key="2">
+          <router-link class="text-white" to="/platform">
+            <a-icon type="bar-chart" />
+            <span class="nav-text">监测平台</span>
+          </router-link>
+        </a-menu-item>
+        <!-- <a-menu-item key="2">
           <router-link class="text-white" to="/monitoring">
             <a-icon type="bar-chart" />
             <span class="nav-text">监测信息</span>
@@ -29,7 +35,7 @@
             <a-icon type="alert" />
             <span class="nav-text">健康预警</span>
           </router-link>
-        </a-menu-item>
+        </a-menu-item> -->
       </a-menu>
     </a-layout-sider>
 

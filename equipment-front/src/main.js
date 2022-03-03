@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import { BootstrapVue, CardPlugin } from 'bootstrap-vue'
+import { BootstrapVue, CardPlugin, ImagePlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import { Button, message, Form, Menu, Layout, Card, Col, Row, Upload, Input, Icon  } from 'ant-design-vue'
+import { Button, message, Form, Menu, Layout, Card, Col, Row, Upload, Input, Icon, Statistic  } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import ECharts from 'vue-echarts'
 import { use } from 'echarts/core'
@@ -19,6 +19,7 @@ Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
 Vue.use(CardPlugin)
+Vue.use(ImagePlugin)
 
 Vue.use(Button)
 Vue.prototype.$message = message
@@ -31,6 +32,7 @@ Vue.use(Layout)
 Vue.use(Card)
 Vue.use(Col)
 Vue.use(Row)
+Vue.use(Statistic)
 
 use([
   CanvasRenderer,

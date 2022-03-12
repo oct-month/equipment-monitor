@@ -1,9 +1,12 @@
 // const dotenv = require('dotenv')
+const fs = require('fs')
 const express = require('express')
 const multer = require('multer')
+const crypto = require('crypto')
 
 const logger = require('./logger')
 const config = require('./config')
+const path = require('path')
 
 // var denv = dotenv.config({
 //     path: './.env',
@@ -14,9 +17,43 @@ const config = require('./config')
 // }
 // logger.debug('load env', denv.parsed)
 
-
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'public/uploads')
+//     },
+//     filename: (req, file, cb) => {
+//         var sum = crypto.createHash('sha256')
+//         var extname = path.extname(file.originalname)
+        
+//         file.stream
+//             .on('data', (chunk) => {
+//                 sum.update(chunk)
+//             })
+//             .on('end', () => {
+//                 var sha = sum.digest('hex')
+//                 cb(null, sha + extname)
+//             })
+//             .on('error', (err) => {
+//                 logger.error(err)
+//                 cb(new Error('multer: 文件读取错误'))
+//             })
+//     }
+// })
 const upload = multer({
-    dest: 'public/uploads/'
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 4 * 1024 * 1024,  // 限制4MB
+        files: 1
+    },
+    fileFilter(req, file, cb) {
+        var re = /(\.jpg|\.png|\.jpeg)$/i
+        if (file.originalname.match(re)) {
+            cb(null, true)
+        }
+        else {
+            cb(new Error('仅支持jpg或png图片'), false)
+        }
+    }
 })
 const app = express()
 
@@ -32,10 +69,25 @@ if (process.env.NODE_ENV !== 'product') {
     })
 }
 
-app.post('/api/image', upload.single('upload'), (req, res, next) => {
-    logger.debug(req.file)
-    res.json({
-        path: req.file.filename
+app.post('/api/image', (req, res, next) => {
+    upload.single('upload')(req, res, (err) => {
+        if (err) {
+            res.json({
+                err: err.message
+            }, 400)
+        }
+        else {
+            var sum = crypto.createHash('sha256')
+            sum.update(req.file.buffer.toString('hex'))
+            var sha = sum.digest('hex')
+            var filename = sha + path.extname(req.file.originalname)
+            var filepath = path.join('public/uploads', filename)
+            fs.writeFileSync(filepath, req.file.buffer)
+
+            res.json({
+                path: '/uploads/' + filename
+            })
+        }
     })
 })
 

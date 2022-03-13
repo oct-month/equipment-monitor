@@ -1,7 +1,6 @@
 const { Request, Response, NextFunction } = require('express')
 
-const logger = require('../utils/logger')
-const { generatorToken, verifyToken } = require('../utils/token')
+const { generatorToken } = require('../utils/token')
 const equipmentDAO = require('../dao/equipment-dao')
 const Equipment = require('../modules/equipment')
 
@@ -12,7 +11,7 @@ const Equipment = require('../modules/equipment')
  * @param {Response} res 
  * @param {NextFunction} next 
  */
-async function getEquipment(req, res, next) {
+async function getEquipments(req, res, next) {
     var pageSize = req.body['pagesize']
     var pageIndex = req.body['pageindex']
     var countFlag = req.body['count']
@@ -41,6 +40,7 @@ async function postEquipment(req, res, next) {
         name: req.body['name'],
         image: req.body['image'],
         info: req.body['info'],
+        position: req.body['position']
     })
     equip.id = await equipmentDAO.insertOneEquipment(equip)
     if (!equip.id) {
@@ -65,7 +65,8 @@ async function postEquipment(req, res, next) {
     })
 }
 
+
 module.exports = {
-    getEquipment,
+    getEquipments,
     postEquipment
 }

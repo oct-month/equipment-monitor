@@ -66,5 +66,5 @@ app.use('/', router)
 
 
 app.listen(config.serverPort, () => {
-    logger.debug(`Server start on http://127.0.01:${config.serverPort}`)
+    logger.debug(`Server start on http://127.0.0.1:${config.serverPort}`)
 })

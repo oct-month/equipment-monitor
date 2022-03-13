@@ -2,13 +2,17 @@ const path = require('path')
 const express = require('express')
 
 const equipmentController = require('../controller/equipment-controller')
+const monitoringController = require('../controller/monitoring-controller')
 // const logger = require('../utils/logger')
 
 
 var router = express.Router()
 
-router.get('/api/equipment', equipmentController.getEquipment)
+router.get('/api/equipment', equipmentController.getEquipments)
 router.post('/api/equipment', equipmentController.postEquipment)
+
+router.get('/api/monitoring', monitoringController.getMonitorings)
+router.post('/api/monitoring', monitoringController.postMonitoring)
 
 // router.post('/api/login', (req, res, next) => {
 //     var username = req.body['username']

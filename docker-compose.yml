@@ -7,7 +7,7 @@ networks:
 
 services:
   equipment-mongodb:
-    image: mongo:5.0
+    image: mongo:5
     container_name: equipment-mongodb
     restart: on-failure
     volumes:

@@ -1,0 +1,241 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2022-03-13T04:36:06.979Z",
+    "__export_source": "insomnia.desktop.app:v2022.1.1",
+    "resources": [
+        {
+            "_id": "req_ea29b8acf35b402cb7266c9a4b6093c2",
+            "parentId": "fld_949accd3451145fcaad98b6d4f32a65a",
+            "modified": 1647145656961,
+            "created": 1646543822254,
+            "url": "http://127.0.0.1:8082/api/image",
+            "name": "图片上传",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "multipart/form-data",
+                "params": [
+                    {
+                        "id": "pair_bf53148ff7ca4610a3949564cc87620f",
+                        "name": "upload",
+                        "value": "",
+                        "description": "",
+                        "type": "file",
+                        "fileName": "/home/sun/图片/2022-03-11 17-06-33 的屏幕截图.png"
+                    },
+                    {
+                        "id": "pair_7b9a5e39082e4074bda2811de0d3676e",
+                        "name": "cover",
+                        "value": "",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "multipart/form-data",
+                    "id": "pair_1ca3f5bfd55e45a5baf368b97528d7e0"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1647144245815,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "fld_949accd3451145fcaad98b6d4f32a65a",
+            "parentId": "wrk_16a44ee8e64f4a0a861de25b73047448",
+            "modified": 1647145952428,
+            "created": 1647142664860,
+            "name": "equipment-monitor",
+            "description": "",
+            "environment": {},
+            "environmentPropertyOrder": {},
+            "metaSortKey": -1647142664860,
+            "_type": "request_group"
+        },
+        {
+            "_id": "wrk_16a44ee8e64f4a0a861de25b73047448",
+            "parentId": null,
+            "modified": 1646543822225,
+            "created": 1646543822225,
+            "name": "New Document",
+            "description": "",
+            "scope": "design",
+            "_type": "workspace"
+        },
+        {
+            "_id": "req_3b0ac11d18024c4f8d13cf49d15ef0a9",
+            "parentId": "fld_949accd3451145fcaad98b6d4f32a65a",
+            "modified": 1647145765022,
+            "created": 1647142763565,
+            "url": "http://127.0.0.1:8081/api/equipment",
+            "name": "注册装备",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"name\": \"butterfly\",\n\t\"image\": \"/uploads/49a060c84a2fce71ef616a68c74b3b9248b9dd7856408c900a593e761138f9fb.png\",\n\t\"info\": \"蝴蝶\\n动物\\n黄色的黄色的\",\n\t\"position\": [34, 108]\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_61efd07e0f3347418c3d451e562305ff"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1647144245790,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_0751d490f78f40aa9d593497f70b8427",
+            "parentId": "fld_949accd3451145fcaad98b6d4f32a65a",
+            "modified": 1647145660259,
+            "created": 1647142958683,
+            "url": "http://127.0.0.1:8081/api/equipment",
+            "name": "获取装备",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [
+                {
+                    "id": "pair_3be195f6d7d0451aab33c80cc8c38881",
+                    "name": "data",
+                    "value": "{\"pagesize\": 10, \"pageindex\": 0, \"count\": true}",
+                    "description": ""
+                }
+            ],
+            "headers": [],
+            "authentication": {},
+            "metaSortKey": -1647144245777.5,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_39f6d570d3fc4e25b931266f03ebf265",
+            "parentId": "fld_949accd3451145fcaad98b6d4f32a65a",
+            "modified": 1647145858253,
+            "created": 1647144245765,
+            "url": "http://127.0.0.1:8081/api/monitoring",
+            "name": "监测信息上传",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMmQ3MzEwOTlkZWNkMjUwMGZkMDQ3MyIsIm5hbWUiOiJidXR0ZXJmbHkiLCJpYXQiOjE2NDcxNDU3NDQsImV4cCI6MTY0Nzc1MDU0NH0.IqIjynFWGtbwrTH2EwFnOydMi3Y8v02XgaXoHNLZOKC1MzuUmk5QMi5YDtOxK-uV1fyzim7HconnpAqkANRESMJWLYOItIsN7zsPgWKGQ0fIDKyLZyjNxOo2CG9zJ8w82p3lh1rG5Yw4yrVkKDzehFYj-johID9CO5u38e9uwYiY9oo_Hfbt_8XTMyD8ngBxyx2nqljaNEUJHvIl-Lwj_zQXXxOwVgkOAMSzX2_w2bWOu_s6OQL6go_nq9fJDORMzgP6HLE_taXRJL0wOlt9xSVD9yiuSHu0DaakTqCk5L9pFqV1DMj96PLSEzXvCHu_pnUhNogy00z_tJbLdc6ERw\",\n\t\"time\": \"2020-01-01T10:12:01.001Z\",\n\t\"content\": {\n\t\t\"temperature\": 34.6,\n    \"humidity\": 0.67,\n    \"voltage\": 220, \n    \"current\": 4\n\t}\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_6892264652ca4d2da112e29b849298b1"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1647144245765,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_4939232375ac4af6badfe83d6812cbd6",
+            "parentId": "fld_949accd3451145fcaad98b6d4f32a65a",
+            "modified": 1647145854350,
+            "created": 1647145648296,
+            "url": "http://127.0.0.1:8081/api/monitoring",
+            "name": "获取监测信息",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [
+                {
+                    "id": "pair_b2c6d61e7e86461288b8a35f7cf3ba9a",
+                    "name": "data",
+                    "value": "{\"equipid\": \"622d731099decd2500fd0473\", \"pagesize\": 10, \"pageindex\": 1, \"count\": true}",
+                    "description": ""
+                }
+            ],
+            "headers": [],
+            "authentication": {},
+            "metaSortKey": -1647143602224,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "env_91cfd9b37fb60a8bcbfda1f07773a14c36e0adb0",
+            "parentId": "wrk_16a44ee8e64f4a0a861de25b73047448",
+            "modified": 1646543822246,
+            "created": 1646543822246,
+            "name": "Base Environment",
+            "data": {},
+            "dataPropertyOrder": null,
+            "color": null,
+            "isPrivate": false,
+            "metaSortKey": 1646543822247,
+            "_type": "environment"
+        },
+        {
+            "_id": "jar_91cfd9b37fb60a8bcbfda1f07773a14c36e0adb0",
+            "parentId": "wrk_16a44ee8e64f4a0a861de25b73047448",
+            "modified": 1646543822250,
+            "created": 1646543822250,
+            "name": "Default Jar",
+            "cookies": [],
+            "_type": "cookie_jar"
+        },
+        {
+            "_id": "spc_2cb9b7a75a6741e1a8cfb9b9ee3b6efa",
+            "parentId": "wrk_16a44ee8e64f4a0a861de25b73047448",
+            "modified": 1647135773337,
+            "created": 1646543822241,
+            "fileName": "New Document",
+            "contents": "",
+            "contentType": "yaml",
+            "_type": "api_spec"
+        },
+        {
+            "_id": "uts_bc33d0e6cb5b480597bd26d4c6a2b887",
+            "parentId": "wrk_16a44ee8e64f4a0a861de25b73047448",
+            "modified": 1646543822256,
+            "created": 1646543822256,
+            "name": "Example Test Suite",
+            "_type": "unit_test_suite"
+        }
+    ]
+}

@@ -1,14 +1,16 @@
+const { ObjectId } = require("mongodb")
+
 class Equipment {
     /**
      * 装备信息
      * @constructor
-     * @param {{?id: String, ?name: String, ?image: String, ?info: String, ?position: Array[Number], ?token: String}} obj 
+     * @param {{?id: String, ?_id: ObjectId, ?name: String, ?image: String, ?info: String, ?position: Array[Number], ?token: String}} obj 
      */
     constructor(obj = {}) {
         /**
          * @type {String}
          */
-        this.id = (obj.id || '').toString()
+        this.id = (obj._id || obj.id || '').toString()
         /**
          * @type {String} 名称
          */

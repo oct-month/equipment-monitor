@@ -1,14 +1,16 @@
+const { ObjectId } = require("mongodb")
+
 class Monitoring {
     /**
      * 装备监测信息
      * @constructor
-     * @param {{?id: String, equip_id: String, ?time: Date, ?content: Object}} obj 
+     * @param {{?id: String, ?_id: ObjectId, equip_id: String, ?time: Date, ?content: Object}} obj 
      */
     constructor(obj = {}) {
         /**
          * @type {String}
          */
-        this.id = obj.id || ''
+        this.id = (obj._id || obj.id || '').toString()
         /**
          * @type {String} 装备id
          */
@@ -34,10 +36,10 @@ class Monitoring {
 
 // content 示例
 var content = {
-    temperature: '34.6',    // 温度
-    humidity: '67',         // 湿度
-    voltage: '220',         // 电压
-    current: '4',           // 电流
+    temperature: 34.6,      // 温度
+    humidity: 0.67,         // 湿度
+    voltage: 220,           // 电压
+    current: 4,             // 电流
 }
 
 module.exports = Monitoring

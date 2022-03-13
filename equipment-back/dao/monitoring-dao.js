@@ -57,30 +57,30 @@ async function insertOneMonitoring(monitoring) {
     }
 }
 
-/**
- * 更新一项Monitoring
- * @param {String} id
- * @param {Object} monitoringInfo 定位信息
- * @returns {Promise<Boolean>} 是否成功更新
- */
-async function updateOneMonitoring(id, monitoringInfo) {
-    let err, res
-    [err, res] = await to((await getCollection()).updateOne({
-        id: new ObjectId(id)
-    }, {
-        $set: monitoringInfo
-    }, {
-        upsert: false
-    }))
-    if (err) {
-        logger.error(err)
-        return false
-    }
-    else {
-        logger.debug(res)
-        return true
-    }
-}
+// /**
+//  * 更新一项Monitoring
+//  * @param {String} id
+//  * @param {Object} monitoringInfo 定位信息
+//  * @returns {Promise<Boolean>} 是否成功更新
+//  */
+// async function updateOneMonitoring(id, monitoringInfo) {
+//     let err, res
+//     [err, res] = await to((await getCollection()).updateOne({
+//         id: new ObjectId(id)
+//     }, {
+//         $set: monitoringInfo
+//     }, {
+//         upsert: false
+//     }))
+//     if (err) {
+//         logger.error(err)
+//         return false
+//     }
+//     else {
+//         logger.debug(res)
+//         return true
+//     }
+// }
 
 /**
  * 查找一项Monitoring
@@ -134,6 +134,28 @@ async function findManyMonitoring(equipId, pageSize, pageIndex) {
 }
 
 /**
+ * 获取指定装备的监测数据数量
+ * @param {String} equipId 
+ * @returns {Promise<Number>} 装备的监测数据量
+ */
+async function countMonitoring(equipId) {
+    let err, res
+    [err, res] = await to((await getCollection()).countDocuments({
+            equip_id: {
+                $eq: equipId
+            }
+    }))
+    if (err) {
+        logger.error(err)
+        return 0
+    }
+    else {
+        logger.debug(res)
+        return res
+    }
+}
+
+/**
  * 获取装备的最新监测信息
  * @param {String} equipId 装备id
  * @returns {Promise<?Monitoring>} 装备的最新monitoring
@@ -155,11 +177,13 @@ async function findEquipmenMonitoring(equipId) {
     return null
 }
 
+
 module.exports = {
     insertOneMonitoring,
     deleteOneMonitoring,
-    updateOneMonitoring,
+    // updateOneMonitoring,
     findOneMonitoring,
     findManyMonitoring,
+    countMonitoring,
     findEquipmenMonitoring
 }

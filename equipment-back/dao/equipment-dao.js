@@ -131,6 +131,7 @@ async function findManyEquipment(pageSize, pageIndex) {
         .limit(pageSize)
     let err, res
     [err, res] = await to(cursor.forEach((doc) => {
+        logger.debug(doc)
         equipmentArray.push(new Equipment(doc))
     }))
     if (err) {
@@ -142,6 +143,7 @@ async function findManyEquipment(pageSize, pageIndex) {
         return equipmentArray
     }
 }
+
 
 module.exports = {
     insertOneEquipment,

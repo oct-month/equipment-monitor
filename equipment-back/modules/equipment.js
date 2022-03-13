@@ -2,13 +2,13 @@ class Equipment {
     /**
      * 装备信息
      * @constructor
-     * @param {{?_id: String, ?name: String, ?image: String, ?info: String, ?token: String}} obj 
+     * @param {{?id: String, ?name: String, ?image: String, ?info: String, ?position: Array[Number], ?token: String}} obj 
      */
     constructor(obj = {}) {
         /**
          * @type {String}
          */
-        this._id = (obj._id || '').toString()
+        this.id = (obj.id || '').toString()
         /**
          * @type {String} 名称
          */
@@ -22,9 +22,23 @@ class Equipment {
          */
         this.info = obj.info || ''
         /**
+         * @type {Array[Number]} 定位
+         */
+        this.position = obj.position || null
+        /**
          * @type {String} 用于设备与平台通信的token
          */
         this.token = obj.token || ''
+    }
+
+    withoutToken() {
+        return {
+            id: this.id,
+            name: this.name,
+            image: this.image,
+            info: this.info,
+            position: this.position
+        }
     }
 
     withoutId() {
@@ -32,22 +46,14 @@ class Equipment {
             name: this.name,
             image: this.image,
             info: this.info,
+            position: this.position,
             token: this.token
-        }
-    }
-
-    withoutToken() {
-        return {
-            _id: this._id,
-            name: this.name,
-            image: this.image,
-            info: this.info
         }
     }
 
     payload() {
         return {
-            _id: this._id,
+            id: this.id,
             name: this.name
         }
     }

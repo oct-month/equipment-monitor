@@ -3,7 +3,7 @@ const to = require('await-to-js').default
 
 const logger = require('../utils/logger')
 const { getCollectionClient } = require('../utils/db')
-const { Monitoring } = require('../modules')
+const Monitoring = require('../modules/monitoring')
 
 
 var collection = null
@@ -22,7 +22,7 @@ async function getCollection() {
 /**
  * 添加一项Monitoring
  * @param {Monitoring} monitoring 监测信息
- * @returns {Promise<?ObjectId>} 添加后的结果id
+ * @returns {Promise<?String>} 添加后的结果id
  */
 async function insertOneMonitoring(monitoring) {
     let err, res
@@ -33,19 +33,19 @@ async function insertOneMonitoring(monitoring) {
     }
     else {
         logger.debug(res)
-        return res.insertedId
+        return res.insertedId.toString()
     }
 }
 
 /**
  * 删除一项Monitoring
- * @param {String} _id 
+ * @param {String} id 
  * @returns {Promise<Boolean>} 是否成功删除
  */
- async function deleteOneMonitoring(_id) {
+ async function deleteOneMonitoring(id) {
     let err, res
     [err, res] = await to((await getCollection()).deleteOne({
-        _id: new ObjectId(_id)
+        id: new ObjectId(id)
     }))
     if (err) {
         logger.error(err)
@@ -59,14 +59,14 @@ async function insertOneMonitoring(monitoring) {
 
 /**
  * 更新一项Monitoring
- * @param {String} _id
+ * @param {String} id
  * @param {Object} monitoringInfo 定位信息
  * @returns {Promise<Boolean>} 是否成功更新
  */
-async function updateOneMonitoring(_id, monitoringInfo) {
+async function updateOneMonitoring(id, monitoringInfo) {
     let err, res
     [err, res] = await to((await getCollection()).updateOne({
-        _id: new ObjectId(_id)
+        id: new ObjectId(id)
     }, {
         $set: monitoringInfo
     }, {
@@ -84,13 +84,13 @@ async function updateOneMonitoring(_id, monitoringInfo) {
 
 /**
  * 查找一项Monitoring
- * @param {String} _id 
+ * @param {String} id 
  * @returns {Promise<?Monitoring>} 一项Monitoring
  */
-async function findOneMonitoring(_id) {
+async function findOneMonitoring(id) {
     let err, res
     [err, res] = await to((await getCollection()).findOne({
-        _id: ObjectId(_id)
+        id: new ObjectId(id)
     }))
     if (err) {
         logger.error(err)

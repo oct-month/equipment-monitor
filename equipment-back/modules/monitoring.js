@@ -2,17 +2,17 @@ class Monitoring {
     /**
      * 装备监测信息
      * @constructor
-     * @param {{?_id: String, ?equip_id: String, ?time: Date, ?content: Object}} obj 
+     * @param {{?id: String, equip_id: String, ?time: Date, ?content: Object}} obj 
      */
     constructor(obj = {}) {
         /**
          * @type {String}
          */
-        this._id = obj._id || ''
+        this.id = obj.id || ''
         /**
          * @type {String} 装备id
          */
-        this.equip_id = obj.equip_id || ''
+        this.equip_id = obj.equip_id
         /**
          * @type {Date} 信息生成时间
          */

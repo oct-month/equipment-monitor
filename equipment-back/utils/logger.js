@@ -4,7 +4,7 @@ log4js.configure({
     appenders: {
         monitor: {
             type: 'file',
-            filename: 'logs/monitor.log'
+            filename: 'monitor.log'
         },
         console: {
             type: 'console'

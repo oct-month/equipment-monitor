@@ -2,8 +2,8 @@ const { Request, Response, NextFunction } = require('express')
 
 const logger = require('../utils/logger')
 const { generatorToken, verifyToken } = require('../utils/token')
-const { equipmentDAO } = require('../dao')
-const { Equipment } = require('../modules')
+const equipmentDAO = require('../dao/equipment-dao')
+const Equipment = require('../modules/equipment')
 
 
 /**
@@ -42,15 +42,15 @@ async function postEquipment(req, res, next) {
         image: req.body['image'],
         info: req.body['info'],
     })
-    equip._id = await equipmentDAO.insertOneEquipment(equip)
-    if (!equip._id) {
+    equip.id = await equipmentDAO.insertOneEquipment(equip)
+    if (!equip.id) {
         res.status(400).json({
             msg: 'insert equip fail'
         })
         return
     }
     equip.token = generatorToken(equip.payload())
-    var flag = await equipmentDAO.updateOneEquipment(equip._id, {
+    var flag = await equipmentDAO.updateOneEquipment(equip.id, {
         token: equip.token
     })
     if (!flag) {
@@ -60,7 +60,7 @@ async function postEquipment(req, res, next) {
         return
     }
     res.json({
-        _id: equip._id,
+        id: equip.id,
         token: equip.token
     })
 }

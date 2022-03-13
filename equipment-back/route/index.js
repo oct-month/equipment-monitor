@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
 
-const { equipmentController } = require('../controller')
+const equipmentController = require('../controller/equipment-controller')
 // const logger = require('../utils/logger')
 
 

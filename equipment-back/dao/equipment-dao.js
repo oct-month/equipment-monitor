@@ -3,7 +3,7 @@ const to = require('await-to-js').default
 
 const logger = require('../utils/logger')
 const { getCollectionClient } = require('../utils/db')
-const { Equipment } = require('../modules')
+const Equipment = require('../modules/equipment')
 
 
 var collection = null
@@ -22,7 +22,7 @@ async function getCollection() {
 /**
  * 添加一项Equipment
  * @param {Equipment} equipment 装备信息
- * @returns {Promise<?ObjectId>} 添加后的结果id
+ * @returns {Promise<?String>} 添加后的结果id
  */
 async function insertOneEquipment(equipment) {
     let err, res
@@ -32,20 +32,19 @@ async function insertOneEquipment(equipment) {
         return null
     }
     else {
-        logger.debug(res)
-        return res.insertedId
+        return res.insertedId.toString()
     }
 }
 
 /**
  * 删除一项Equipment
- * @param {String} _id 
+ * @param {String} id 
  * @returns {Promise<Boolean>} 是否成功删除
  */
-async function deleteOneEquipment(_id) {
+async function deleteOneEquipment(id) {
     let err, res
     [err, res] = await to((await getCollection()).deleteOne({
-        _id: new ObjectId(_id)
+        id: new ObjectId(id)
     }))
     if (err) {
         logger.error(err)
@@ -59,14 +58,14 @@ async function deleteOneEquipment(_id) {
 
 /**
  * 更新一项Equipment
- * @param {String} _id
+ * @param {String} id
  * @param {Object} equipinfo 装备信息
  * @returns {Promise<Boolean>} 是否成功更新
  */
-async function updateOneEquipment(_id, equipinfo) {
+async function updateOneEquipment(id, equipinfo) {
     let err, res
     [err, res] = await to((await getCollection()).updateOne({
-        _id: new ObjectId(_id)
+        id: new ObjectId(id)
     }, {
         $set: equipinfo
     }, {
@@ -84,13 +83,13 @@ async function updateOneEquipment(_id, equipinfo) {
 
 /**
  * 查找一项Equipment
- * @param {String} _id 
+ * @param {String} id 
  * @returns {Promise<?Equipment>} 一项Equipment
  */
-async function findOneEquipment(_id) {
+async function findOneEquipment(id) {
     let err, res
     [err, res] = await to((await getCollection()).findOne({
-        _id: ObjectId(_id)
+        id: new ObjectId(id)
     }))
     if (err) {
         logger.error(err)

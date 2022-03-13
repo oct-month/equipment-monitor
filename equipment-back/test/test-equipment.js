@@ -1,3 +1,3 @@
-const { Equipment } = require('../modules')
+const Equipment = require('../modules/equipment')
 
 console.log(new Equipment());

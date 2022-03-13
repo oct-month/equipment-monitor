@@ -82,7 +82,13 @@ app.post('/api/image', (req, res, next) => {
             var sha = sum.digest('hex')
             var filename = sha + path.extname(req.file.originalname)
             var filepath = path.join('public/uploads', filename)
-            fs.writeFileSync(filepath, req.file.buffer)
+            logger.debug(req.body)
+            if (!fs.existsSync(filepath) || req.body['cover']) {
+                fs.writeFileSync(filepath, req.file.buffer)
+            }
+            else {
+                logger.debug(`${filepath} 已存在`)
+            }
 
             res.json({
                 path: '/uploads/' + filename

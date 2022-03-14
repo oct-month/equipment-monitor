@@ -5,7 +5,7 @@
         <img class="img-responsive center-block" height="24px" src="./assets/logo.png" alt="logo" srcset="">
         <span class="text-center text-success">装备健康监测系统</span>
       </div>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
+      <a-menu theme="dark" mode="inline" :default-selected-keys="['2']">
         <a-menu-item key="1">
           <router-link class="text-white" to="/equipment">
             <a-icon type="home" />

@@ -13,4 +13,6 @@ else {
     }
 }
 
+config['mapKey'] = 'fb10d68786e5060551e53489063e8b34'
+
 export default config

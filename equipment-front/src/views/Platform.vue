@@ -93,6 +93,7 @@
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { THEME_KEY } from 'vue-echarts';
 
+import config from '@/config'
 
 export default {
   name: 'Monitoring',
@@ -322,18 +323,19 @@ export default {
   methods: {
     initMap() {
       AMapLoader.load({
-        key: 'fb10d68786e5060551e53489063e8b34',
+        key: config.mapKey,
         version: '2.0',
         plugins: [
           'AMap.ToolBar',
           'AMap.Scale',
           'AMap.MapType',
-          'AMap.Geocoder'
+          // 'AMap.Geocoder'
         ]
       })
         .then((AMap) => {
           this.AMap = AMap
           this.map = new AMap.Map('map', {
+            resizeEnable: true,
             viewMode: '2D',
             zoom: 14,
             center: [108.918, 34.232],
@@ -342,7 +344,7 @@ export default {
           })
 
           this.map.addControl(new AMap.ToolBar())
-          this.map.addControl(new AMap.Scale());
+          this.map.addControl(new AMap.Scale())
           this.map.addControl(new AMap.MapType())
 
           // 标点

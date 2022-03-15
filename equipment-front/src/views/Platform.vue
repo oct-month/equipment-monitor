@@ -92,8 +92,13 @@
 <script>
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { THEME_KEY } from 'vue-echarts';
+import axios from 'axios';
 
 import config from '@/config'
+
+function sleep(s) {
+  return new Promise((resolve) => setTimeout(resolve, s * 1000))
+}
 
 export default {
   name: 'Monitoring',
@@ -102,6 +107,7 @@ export default {
   },
   data() {
     return {
+      equipments: [],
       AMap: null,
       map: null,
       isShow: 0,
@@ -321,6 +327,34 @@ export default {
     }
   },
   methods: {
+    getEquipment() {
+      if (this.map) {
+        var nw = this.map.getBounds().getNorthWest()  // 左上
+        var se = this.map.getBounds().getSouthEast()  // 右下
+        // TODO 获取指定区域内的装备
+        axios.get('/api/equipment', {
+          baseURL: config.backBaseUrl,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          params: {
+            data: JSON.stringify({
+              pagesize: 100,
+              pageindex: 0
+            })
+          },
+          withCredentials: false,
+          responseType: 'json'
+        })
+          .then((res) => {
+            this.equipments = res.data['data']
+            console.log(this.equipments)
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+        }
+    },
     initMap() {
       AMapLoader.load({
         key: config.mapKey,
@@ -329,7 +363,7 @@ export default {
           'AMap.ToolBar',
           'AMap.Scale',
           'AMap.MapType',
-          // 'AMap.Geocoder'
+          'AMap.Geolocation'
         ]
       })
         .then((AMap) => {
@@ -338,14 +372,40 @@ export default {
             resizeEnable: true,
             viewMode: '2D',
             zoom: 14,
-            center: [108.918, 34.232],
+            // center: [108.918, 34.232],
             // layers: [new AMap.TileLayer.Satellite(), new AMap.TileLayer.RoadNet()],
-            mapStyle: 'amap://styles/blue'
+            // mapStyle: 'amap://styles/blue'
           })
 
           this.map.addControl(new AMap.ToolBar())
           this.map.addControl(new AMap.Scale())
           this.map.addControl(new AMap.MapType())
+
+          var geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true, // 使用高精度定位
+            timeout: 10,              // 超时 s
+            maximumAge: 0,            // 定位结果缓存时间
+            convert: true,            // 转换为高德坐标
+            showButton: true,         // 显示按钮
+            position: 'LB',           // 按钮位置
+            offset: [10, 50],
+            showMarker: true,         // 显示定位标记
+            showCircle: true,         // 显示精度范围
+            panToLocation: true,      // 移动到定位点
+            zoomToAccuracy: true      // 自动重设视野范围
+          })
+          this.map.addControl(geolocation)
+
+          geolocation.getCurrentPosition(() => {
+            sleep(2).then(() => {
+              this.map.on('zoomend', () => {
+                console.log('地图缩放结束')
+              })
+              this.map.on('moveend', () => {
+                console.log('地图移动结束')
+              })
+            })
+          })
 
           // 标点
           var marker = new AMap.Marker({
@@ -386,14 +446,26 @@ export default {
           })
           this.map.add(marker2)
 
-          // new AMap.Geocoder({
-          //   city: '全国',
-          //   radius: 500,
-          //   batch: false,
-          //   extensions: 'base'
-          // }).getAddress(new AMap.LngLat(108, 34), (status, result) => {
-          //   console.log(status)
-          //   console.log(result)
+          // this.map.on('complete', () => {
+          //   console.log('地图加载完成')
+          // })
+          // this.map.on('zoomstart', () => {
+          //   console.log('地图开始缩放')
+          // })
+          // this.map.on('zoomend', () => {
+          //   console.log('地图缩放结束')
+          // })
+          // this.map.on('mapmove', () => {
+          //   console.log('地图移动中')
+          // })
+          // this.map.on('movestart', () => {
+          //   console.log('地图开始移动')
+          // })
+          // this.map.on('moveend', () => {
+          //   console.log('地图移动结束')
+          // })
+          // this.map.on('resize', () => {
+          //   console.log('地图尺寸改变')
           // })
         })
         .catch((e) => {
@@ -403,6 +475,27 @@ export default {
   },
   mounted() {
     this.initMap()
+    axios.get('/api/equipment', {
+      baseURL: config.backBaseUrl,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      params: {
+        data: JSON.stringify({
+          pagesize: 100,
+          pageindex: 0
+        })
+      },
+      withCredentials: false,
+      responseType: 'json'
+    })
+    .then((res) => {
+      this.equipments = res.data['data']
+      console.log(this.equipments)
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   },
   beforeDestroy() {
     this.map.destroy()

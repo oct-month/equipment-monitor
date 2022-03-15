@@ -262,7 +262,7 @@ export default {
   mounted() {
     this.initMap()
     // axios.get('/api/equipment', {
-    //   baseURL: this.config.backBaseUrl,
+    //   baseURL: config.backBaseUrl,
     //   headers: {
     //     'Content-Type': 'application/json'
     //   },

@@ -26,7 +26,7 @@ async function getCollection() {
  */
 async function insertOneMonitoring(monitoring) {
     let err, res
-    [err, res] = await to((await getCollection()).insertOne(monitoring.withoutId()))
+    [err, res] = await to((await getCollection()).insertOne(monitoring.dbData()))
     if (err) {
         logger.error(err)
         return null
@@ -170,7 +170,6 @@ async function findEquipmenMonitoring(equipId) {
         .limit(1)
     let err, res
     [err, res] = await to(cursor.forEach((doc) => {
-        logger.debug(doc)
         return new Monitoring(doc)
     }))
     logger.error(err)

@@ -2,35 +2,23 @@
 <div>
   <a-row type="flex" justify="space-around" align="middle">
     <a-col :span="4">
-      <a-card v-if="isShow==0" class="r1 m-2">
+      <a-card v-if="!showEquipment" class="r1 m-2">
         <p class="fs-4 fw-bold text-start">统计数据</p>
-        <a-statistic title="存储类设备" :value="1" suffix="台"/>
-        <a-statistic title="边缘设备" :value="1" suffix="台"/>
-        <a-statistic title="展示设备" :value="0" suffix="台"/>
+        <a-statistic title="设备总数" :value="equipmentsCount" suffix="台"/>
+        <a-statistic title="当前地图设备数量" :value="equipments.length" suffix="台"/>
         <a-statistic title="异常的设备" :value="0" suffix="台"/>
         <a-statistic title="有异常征兆的设备" :value="0" suffix="台"/>
       </a-card>
-      <a-card v-else-if="isShow==1" class="r1 m-2">
-        <p class="fs-4 fw-bold text-start border-bottom">群晖NAS</p>
-        <b-img class="border-bottom" :src="require('@/assets/nas.jpeg')" fluid/>
+      <a-card v-else class="r1 m-2">
+        <p class="fs-4 fw-bold text-start border-bottom">{{nowEquipment.name}}</p>
+        <b-img class="border-bottom" :src="nowEquipment.image" fluid/>
         <div class="border-bottom">
-          <p>用于文化展演视频的存储、备份</p>
-          <p>容量为10T</p>
-          <p>购置日期为2022-03-03</p>
+          <p>
+            <span v-for="info in nowEquipment.infos">{{info}}<br/></span>
+          </p>
         </div>
         <a-statistic title="健康状况" value="良好"/>
         <a-statistic class="border-bottom" title="预计剩余寿命" value="11" suffix="年"/>
-      </a-card>
-      <a-card v-else class="r1 m-2">
-        <p class="fs-4 fw-bold text-start border-bottom">边缘服务器</p>
-        <b-img class="border-bottom" :src="require('@/assets/edge.jpeg')" fluid/>
-        <div class="border-bottom">
-          <p>用于文化展演视频的流的边缘传输处理、转码</p>
-          <p>品牌：环旭电子</p>
-          <p>购置日期为2022-03-02</p>
-        </div>
-        <a-statistic title="健康状况" value="良好"/>
-        <a-statistic class="border-bottom" title="预计剩余寿命" value="4" suffix="年"/>
       </a-card>
     </a-col>
     <a-col :span="18">
@@ -47,7 +35,7 @@
     </a-col>
   </a-row>
 
-  <a-row v-if="isShow" class="m-2" type="flex" justify="space-around" align="middle">
+  <a-row v-if="showEquipment" class="m-2" type="flex" justify="space-around" align="middle">
     <a-col v-for="op in options" :key="op.title" :span="Math.floor(24/options.length)">
       <p>{{op.title}}</p>
       <v-chart class="chart r2" :option="op.option" autoresize/>
@@ -96,8 +84,38 @@ import axios from 'axios';
 
 import config from '@/config'
 
+var AMap = null
+var map = null
+
+/**
+ * @param {Number} s
+ */
 function sleep(s) {
   return new Promise((resolve) => setTimeout(resolve, s * 1000))
+}
+
+/**
+ * @param {String} content
+ * @returns {String}
+ */
+function encodeHtml(content) {
+  let div = document.createElement('div')
+  div.append(content)
+  return div.innerHTML
+}
+
+/**
+ * @param {String} text
+ * @returns {Array<String>}
+ */
+function splitWrapAround(text) {
+  let sps = []
+  text.split('\n').forEach(t => {
+    if (t) {
+      sps.push('t')
+    }
+  })
+  return sps
 }
 
 export default {
@@ -107,10 +125,12 @@ export default {
   },
   data() {
     return {
+      imageBaseUrl: '',
       equipments: [],
-      AMap: null,
-      map: null,
-      isShow: 0,
+      equipmentsCount: 0,
+      lastMapMoveDate: new Date(),
+      showEquipment: false,
+      nowEquipment: {},
       options: [],
       options1: [
         {
@@ -326,21 +346,106 @@ export default {
       ]
     }
   },
+  watch: {
+    equipments: function(newval, oldval) {
+      if (AMap != null && map != null) {
+        var markerList = map.getAllOverlays('marker')
+        var addM = []       // oldval 没有 newval 有的加上
+        newval.forEach(equipNew => {
+          let flag = true
+          oldval.every(equipOld => {
+            if (equipNew.id === equipOld.id) {
+              flag = false
+              return false
+            }
+            return true
+          })
+          if (flag) {
+            let marker = new AMap.Marker({
+              title: equipNew.name,
+              label: equipNew.name,
+              position: equipNew.position,
+              clickable: true,
+              topWhenClick: true,
+              animation: 'AMAP_ANIMATION_BOUNCE',
+              extData: {
+                id: equipNew.id
+              }
+            })
+            let content = [
+              `<h5>${encodeHtml(equipNew.name)}</h5>`,
+              `<p>${encodeHtml(equipNew.info)}</p>`
+            ]
+            let infowindow = new AMap.InfoWindow({
+              content: content.join(''),
+              offset: new AMap.Pixel(0, -32)
+            })
+            marker.on('click', () => {
+              this.nowEquipment = {
+                name: equipNew.name,
+                image: config.imageBaseUrl + equipNew.image,
+                infos: splitWrapAround(equipNew.info)
+              }
+              this.showEquipment = true
+              // TODO 展示监测信息
+            })
+            marker.on('mouseover', () => {
+              infowindow.open(map, equipNew.position)
+            })
+            marker.on('mouseout', () => {
+              infowindow.close()
+            })
+            addM.push(marker)
+          }
+        })
+        var deleteM = []    // oldval 有 newval 没有的删掉
+        oldval.forEach(equipOld => {
+          let flag = true
+          newval.every(equipNew => {
+            if (equipOld.id === equipNew.id) {
+              flag = false
+              return false
+            }
+            return true
+          })
+          if (flag) {
+            deleteM.push(equipOld.id)
+          }
+        })
+        // 移除
+        markerList.forEach(marker => {
+          let flag = false
+          deleteM.every(deleteId => {
+            if (marker.getExtData().id === deleteId) {
+              flag = true
+              return false
+            }
+            return true
+          })
+          if (flag) {
+            map.remove(marker)
+          }
+        })
+        // 增加
+        map.add(addM)
+      }
+    }
+  },
   methods: {
-    getEquipment() {
-      if (this.map) {
-        var nw = this.map.getBounds().getNorthWest()  // 左上
-        var se = this.map.getBounds().getSouthEast()  // 右下
-        // TODO 获取指定区域内的装备
-        axios.get('/api/equipment', {
+    getEquipmentPosition(countFlag=false) {
+      if (map) {
+        var nw = map.getBounds().getNorthWest()  // 左上
+        var se = map.getBounds().getSouthEast()  // 右下
+        axios.get('/api/equipment/position', {
           baseURL: config.backBaseUrl,
           headers: {
             'Content-Type': 'application/json'
           },
           params: {
             data: JSON.stringify({
-              pagesize: 100,
-              pageindex: 0
+              nw: nw,
+              se: se,
+              count: countFlag
             })
           },
           withCredentials: false,
@@ -348,12 +453,15 @@ export default {
         })
           .then((res) => {
             this.equipments = res.data['data']
-            console.log(this.equipments)
+            if (countFlag) {
+              this.equipmentsCount = res.data['count']
+            }
+            // console.log(this.equipments)
           })
           .catch((err) => {
             console.error(err);
           })
-        }
+      }
     },
     initMap() {
       AMapLoader.load({
@@ -366,9 +474,9 @@ export default {
           'AMap.Geolocation'
         ]
       })
-        .then((AMap) => {
-          this.AMap = AMap
-          this.map = new AMap.Map('map', {
+        .then((AMap_) => {
+          AMap = AMap_
+          map = new AMap.Map('map', {
             resizeEnable: true,
             viewMode: '2D',
             zoom: 14,
@@ -377,9 +485,9 @@ export default {
             // mapStyle: 'amap://styles/blue'
           })
 
-          this.map.addControl(new AMap.ToolBar())
-          this.map.addControl(new AMap.Scale())
-          this.map.addControl(new AMap.MapType())
+          map.addControl(new AMap.ToolBar())
+          map.addControl(new AMap.Scale())
+          map.addControl(new AMap.MapType())
 
           var geolocation = new AMap.Geolocation({
             enableHighAccuracy: true, // 使用高精度定位
@@ -394,77 +502,85 @@ export default {
             panToLocation: true,      // 移动到定位点
             zoomToAccuracy: true      // 自动重设视野范围
           })
-          this.map.addControl(geolocation)
+          map.addControl(geolocation)
 
           geolocation.getCurrentPosition(() => {
             sleep(2).then(() => {
-              this.map.on('zoomend', () => {
-                console.log('地图缩放结束')
+              // 等待地图定位完成后，获取装备信息lastMapMoveDate
+              this.getEquipmentPosition(true)
+              map.on('zoomend', () => {
+                if (new Date() - this.lastMapMoveDate > 1000) {
+                  this.getEquipmentPosition()
+                  this.lastMapMoveDate = new Date()
+                }
               })
-              this.map.on('moveend', () => {
-                console.log('地图移动结束')
+              map.on('moveend', () => {
+                if (new Date() - this.lastMapMoveDate > 1000) {
+                  this.getEquipmentPosition()
+                  this.lastMapMoveDate = new Date()
+                }
               })
             })
           })
 
-          // 标点
-          var marker = new AMap.Marker({
-            // icon: new AMap.Icon({
-            //   image: require('@/assets/logo.png'),
-            //   size: new AMap.Size(40, 50),
-            //   imageSize: new AMap.Size(40, 50),
-            //   imageOffset: new AMap.Pixel(0, -6)
-            // }),
-            title: 'nas',
-            position: [108.91781429574087, 34.232201009296396],
-            offset: new AMap.Pixel(0, 0),
-            anchor: 'bottom-center',
-            clickable: true,
-            topWhenClick: true,
-            animation: 'AMAP_ANIMATION_BOUNCE'
-          })
-          marker.on('click', (ev) => {
-            console.log(ev)
-            this.isShow = 1
-            this.options = this.options1
-          })
-          this.map.add(marker)
+          // // 标点
+          // var marker = new AMap.Marker({
+          //   // icon: new AMap.Icon({
+          //   //   image: require('@/assets/logo.png'),
+          //   //   size: new AMap.Size(40, 50),
+          //   //   imageSize: new AMap.Size(40, 50),
+          //   //   imageOffset: new AMap.Pixel(0, -6)
+          //   // }),
+          //   title: 'nas',
+          //   position: [108.91781429574087, 34.232201009296396],
+          //   offset: new AMap.Pixel(0, 0),
+          //   anchor: 'bottom-center',
+          //   clickable: true,
+          //   topWhenClick: true,
+          //   animation: 'AMAP_ANIMATION_BOUNCE'
+          // })
+          // marker.on('click', (ev) => {
+          //   console.log(ev)
+          //   this.isShow = 1
+          //   this.options = this.options1
+          // })
+          // map.add(marker)
 
-          var marker2 = new AMap.Marker({
-            title: 'edge',
-            position: [108.9, 34.24],
-            offset: new AMap.Pixel(0, 0),
-            anchor: 'bottom-center',
-            clickable: true,
-            topWhenClick: true,
-            animation: 'AMAP_ANIMATION_BOUNCE'
-          })
-          marker2.on('click', (ev) => {
-            console.log(ev)
-            this.isShow = 2
-            this.options = this.options2
-          })
-          this.map.add(marker2)
+          // var marker2 = new AMap.Marker({
+          //   title: 'edge',
+          //   position: [108.9, 34.24],
+          //   offset: new AMap.Pixel(0, 0),
+          //   anchor: 'bottom-center',
+          //   clickable: true,
+          //   topWhenClick: true,
+          //   animation: 'AMAP_ANIMATION_BOUNCE'
+          // })
+          // marker2.on('click', (ev) => {
+          //   console.log(ev)
+          //   this.isShow = 2
+          //   this.options = this.options2
+          // })
+          // map.add(marker2)
 
-          // this.map.on('complete', () => {
+          // map.on('complete', () => {
           //   console.log('地图加载完成')
           // })
-          // this.map.on('zoomstart', () => {
+          // map.on('zoomstart', () => {
           //   console.log('地图开始缩放')
           // })
-          // this.map.on('zoomend', () => {
+          // map.on('zoomend', () => {
           //   console.log('地图缩放结束')
           // })
-          // this.map.on('mapmove', () => {
+          // map.on('mapmove', () => {
           //   console.log('地图移动中')
           // })
-          // this.map.on('movestart', () => {
+          // map.on('movestart', () => {
           //   console.log('地图开始移动')
           // })
-          // this.map.on('moveend', () => {
+          // map.on('moveend', () => {
           //   console.log('地图移动结束')
           // })
-          // this.map.on('resize', () => {
+          // map.on('resize', () => {
           //   console.log('地图尺寸改变')
           // })
         })
@@ -474,31 +590,11 @@ export default {
     }
   },
   mounted() {
+    this.imageBaseUrl = config.imageBaseUrl
     this.initMap()
-    axios.get('/api/equipment', {
-      baseURL: config.backBaseUrl,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      params: {
-        data: JSON.stringify({
-          pagesize: 100,
-          pageindex: 0
-        })
-      },
-      withCredentials: false,
-      responseType: 'json'
-    })
-    .then((res) => {
-      this.equipments = res.data['data']
-      console.log(this.equipments)
-    })
-    .catch((err) => {
-      console.error(err);
-    })
   },
   beforeDestroy() {
-    this.map.destroy()
+    map.destroy()
   }
 };
 </script>

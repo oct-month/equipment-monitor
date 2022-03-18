@@ -32,6 +32,14 @@ class Monitoring {
             content: this.content
         }
     }
+
+    dbData() {
+        return {
+            equip_id: this.equip_id,
+            time: this.time,
+            content: this.content
+        }
+    }
 }
 
 // content 示例

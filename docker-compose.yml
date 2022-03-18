@@ -37,19 +37,22 @@ services:
     image: ablocker/equipment-front:latest
     container_name: equipment-front
     restart: on-failure
+    ports:
+      - 80:80
+      - 443:443
     depends_on:
       - equipment-back
       - equipment-image
   
-  equipment-nginx:
-    image: nginx:stable-alpine
-    container_name: equipment-nginx
-    restart: on-failure
-    volumes:
-      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - 80:80
-    depends_on:
-      - equipment-back
-      - equipment-image
-      - equipment-front
+  # equipment-nginx:
+  #   image: nginx:stable-alpine
+  #   container_name: equipment-nginx
+  #   restart: on-failure
+  #   volumes:
+  #     - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - equipment-back
+  #     - equipment-image
+  #     - equipment-front

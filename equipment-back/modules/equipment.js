@@ -4,13 +4,13 @@ class Equipment {
     /**
      * 装备信息
      * @constructor
-     * @param {{?id: String, ?_id: ObjectId, ?name: String, ?image: String, ?info: String, ?position: Array[Number], ?token: String}} obj 
+     * @param {{?id: String, ?_id: ObjectId, ?name: String, ?image: String, ?info: String, ?position: Array[Number], ?positionLn: Number, ?positionLa: Number, ?token: String}} obj 
      */
     constructor(obj = {}) {
         /**
          * @type {String}
          */
-        this.id = (obj._id || obj.id || '').toString()
+        this.id = (obj.id || obj._id || '').toString()
         /**
          * @type {String} 名称
          */
@@ -26,7 +26,12 @@ class Equipment {
         /**
          * @type {Array[Number]} 定位
          */
-        this.position = obj.position || null
+        if (obj.position && obj.position.length === 2) {
+            this.position = obj.position
+        }
+        else {
+            this.position = [obj.positionLn, obj.positionLa]
+        }
         /**
          * @type {String} 用于设备与平台通信的token
          */
@@ -49,6 +54,17 @@ class Equipment {
             image: this.image,
             info: this.info,
             position: this.position,
+            token: this.token
+        }
+    }
+
+    dbData() {
+        return {
+            name: this.name,
+            image: this.image,
+            info: this.info,            
+            positionLn: this.position[0],
+            positionLa: this.position[1],
             token: this.token
         }
     }

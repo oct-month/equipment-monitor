@@ -1,9 +1,10 @@
 var config = null
+var host = '172.21.186.30'
 
 if (process.env.NODE_ENV !== 'product') {
     config = {
-        backBaseUrl: 'http://127.0.0.1:8081',
-        imageBaseUrl: 'http://127.0.0.1:8082'
+        backBaseUrl: `http://${host}:8081`,
+        imageBaseUrl: `http://${host}:8082`
     }
 }
 else {

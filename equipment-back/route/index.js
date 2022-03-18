@@ -1,4 +1,3 @@
-const path = require('path')
 const express = require('express')
 
 const equipmentController = require('../controller/equipment-controller')
@@ -9,6 +8,7 @@ const monitoringController = require('../controller/monitoring-controller')
 var router = express.Router()
 
 router.get('/api/equipment', equipmentController.getEquipments)
+router.get('/api/equipment/position', equipmentController.getEquipmentsByPosition)
 router.post('/api/equipment', equipmentController.postEquipment)
 
 router.get('/api/monitoring', monitoringController.getMonitorings)

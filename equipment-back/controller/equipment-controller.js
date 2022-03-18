@@ -30,6 +30,35 @@ async function getEquipments(req, res, next) {
 }
 
 /**
+ * 获取指定区域内的装备信息
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next 
+ */
+async function getEquipmentsByPosition(req, res, next) {
+    var lu = req.body['nw']
+    var rd = req.body['se']
+    var countFlag = req.body['count']
+    // if (lu && lu.length === 2 && rd && rd.length === 2) {
+    // }
+    // else {
+    //     logger.error(`findManyEquipmentByPostion 参数错误: ${lu}, ${rd}`)
+    //     return []
+    // }
+    var resBody = {}
+    resBody['data'] = await equipmentDAO.findManyEquipmentByPosition(lu, rd)
+    resBody['data'].forEach((value, idx, array) => {
+        array[idx] = value.withoutToken()
+    })
+    resBody['data'].reverse()
+    if (countFlag) {
+        resBody['count'] = await equipmentDAO.countEquipment()
+    }
+    res.json(resBody)
+}
+
+
+/**
  * 注册装备信息
  * @param {Request} req 
  * @param {Response} res 
@@ -68,5 +97,6 @@ async function postEquipment(req, res, next) {
 
 module.exports = {
     getEquipments,
+    getEquipmentsByPosition,
     postEquipment
 }

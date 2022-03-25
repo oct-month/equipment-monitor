@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 module.exports = {
-    host: '172.21.186.30',
+    host: '172.22.95.10',
     // 数据库URL
     dbUrl: process.env.NODE_ENV === 'product' ? 'mongodb://equipment-mongodb:27017' : 'mongodb://127.0.0.1:27017',
     // 数据库名称

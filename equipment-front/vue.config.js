@@ -4,7 +4,7 @@ const path = require('path')
 const zlib = require('zlib')
 
 // const isProduction = process.env.NODE_ENV === 'production'
-var host = '172.21.186.30'
+var host = '172.22.95.10'
 
 module.exports = {
     publicPath: './',

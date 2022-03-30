@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import EquipmentInfo from '@/views/EquipmentInfo.vue'
 import Platform from '@/views/Platform.vue'
-// import Monitoring from '@/views/Monitoring.vue'
+import Monitoring from '@/views/Monitoring.vue'
 // import Location from '@/views/Location.vue'
 
 Vue.use(VueRouter)
@@ -26,11 +26,11 @@ const routes = [
     name: 'Platform',
     component: Platform
   },
-  // {
-  //   path: '/monitoring',
-  //   name: 'Monitoring',
-  //   component: Monitoring
-  // },
+  {
+    path: '/monitoring',
+    name: 'Monitoring',
+    component: Monitoring
+  },
   // {
   //   path: '/location',
   //   name: 'Location',

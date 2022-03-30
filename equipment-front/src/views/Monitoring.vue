@@ -1,51 +1,61 @@
 <template>
-  <div>
-    <v-chart class="chart" :option="option" autoresize/>
+  <div class="ezuikit">
+    <div id="video-container"></div>
   </div>
 </template>
 
+
+<style scoped>
+.video-container {
+  width: 900px;
+  height: 600px;
+}
+</style>
+
+
 <script>
-import { THEME_KEY } from 'vue-echarts';
+import qs from 'qs'
+import axios from 'axios'
+import EZUIKit from 'ezuikit-js'
 
 export default {
   name: 'Monitoring',
-  provide: {
-    [THEME_KEY]: 'dark',
-  },
   data() {
     return {
-      option: {
-        xAxis: {
-          type: 'category',
-          data: ['01-05', '01-06', '01-07', '01-08', '01-09']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            data: [30.4, 35.4, 30.7, 33.3, 37.1],
-            type: 'line',
-            label: {
-              show: true,
-              position: 'top',
-              textStyle: {
-                fontSize: 20
-              }
-            }
-          }
-        ]
-      }
+      player: null
     }
   },
-  methods: {},
-  created() {},
-};
-</script>
-
-<style scoped>
-.chart {
-  height: 400px;
-  width: 600px;
+  mounted() {
+    axios({
+      method: 'POST',
+      url: 'https://open.ys7.com/api/lapp/token/get',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: qs.stringify({
+        appKey: '6f1e338e10214d74884e8bf2065c9aca',
+        appSecret: '092ff92d7ae65d7d5e29656f3ce12168'
+      }),
+      withCredentials: false,
+      responseType: 'json'
+    })
+      .then((res) => {
+        if (res.data.code == 200) {
+          this.player = new EZUIKit.EZUIKitPlayer({
+            id: 'video-container',
+            accessToken: res.data.data.accessToken,
+            url:"ezopen://open.ys7.com/J59194897/1.hd.live",
+            autoplay: true,
+            template: 'theme',
+            plugin: ['talk'],
+            width: 900,
+            height: 600
+          })
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
 }
-</style>
+</script>

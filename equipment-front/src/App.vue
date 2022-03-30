@@ -18,6 +18,12 @@
             <span class="nav-text">监测平台</span>
           </router-link>
         </a-menu-item>
+        <a-menu-item key="3">
+          <router-link class="text-white" to="/monitoring">
+            <a-icon type="bar-chart" />
+            <span class="nav-text">视频监控</span>
+          </router-link>
+        </a-menu-item>
         <!-- <a-menu-item key="2">
           <router-link class="text-white" to="/monitoring">
             <a-icon type="bar-chart" />

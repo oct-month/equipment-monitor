@@ -38,8 +38,8 @@ services:
     container_name: equipment-front
     restart: on-failure
     ports:
-      - 80:80
-      - 443:443
+      # - 80:80
+      - 8080:443
     depends_on:
       - equipment-back
       - equipment-image

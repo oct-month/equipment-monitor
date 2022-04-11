@@ -23,6 +23,16 @@ services:
     restart: on-failure
     depends_on:
       - equipment-mongodb
+    # ports:
+    #   - 8081:8081
+  
+  equipment-sensor:
+    build: ./equipment-sensor/
+    image: ablocker/equipment-sensor:latest
+    container_name: equipment-sensor
+    restart: on-failure
+    ports:
+      - 8083:8083
   
   equipment-image:
     build: ./equipment-image/
@@ -31,6 +41,8 @@ services:
     restart: on-failure
     volumes:
       - ./equipment-image/public:/equipment-image/public
+    # ports:
+    #   - 8082:8082
   
   equipment-front:
     build: ./equipment-front/

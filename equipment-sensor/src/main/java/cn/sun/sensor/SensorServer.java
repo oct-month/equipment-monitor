@@ -1,5 +1,6 @@
 package cn.sun.sensor;
 
+import java.io.*;
 import java.text.SimpleDateFormat;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,30 @@ public class SensorServer
 
     public SensorServer()
     {
-        this.rsServer = RSServer.Initiate(Config.port, Config.paramPath);
+        File temp = null;
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(Config.paramPath);
+        try {
+            temp = File.createTempFile("param-temp", ".dat");
+            LOGGER.info("param-temp file in: " + temp.getAbsolutePath());
+            temp.deleteOnExit();
+            int idx = 0;
+            byte[] bytes = new byte[1024];
+            FileOutputStream fo = new FileOutputStream(temp);
+            while ((idx = is.read(bytes)) != -1){
+                fo.write(bytes, 0, idx);
+                fo.flush();
+            }
+            fo.close();
+            is.close();
+        }
+        catch (IOException e) {
+            LOGGER.error(e);
+        }
+
+        if (temp != null) {
+            LOGGER.error("param-temp file write error.");
+            this.rsServer = RSServer.Initiate(Config.port, temp.getAbsolutePath());
+        }
         this.sensorData = new SensorData();
     }
 

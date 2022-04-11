@@ -2,18 +2,25 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.sun.sensor</groupId>
-  <artifactId>sensor-dev</artifactId>
+  <artifactId>equipment-sensor</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>sensor-dev</name>
+  <name>equipment-sensor</name>
   <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.jnrsmcu.sdk</groupId>
       <artifactId>netdevice</artifactId>
       <version>2.2.2</version>
-      <systemPath>${project.basedir}/libs/RSNetDevice-2.2.2.jar</systemPath>
+      <systemPath>${project.basedir}/lib/RSNetDevice-2.2.2.jar</systemPath>
       <scope>system</scope>
     </dependency>
 
@@ -27,6 +34,7 @@
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.17.2</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -35,4 +43,25 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.6.6</version>
+        <configuration>
+            <includeSystemScope>true</includeSystemScope>
+            <mainClass>cn.sun.sensor.App</mainClass>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -16,7 +16,7 @@ public class App
             acquireData.start();
         }
         catch (InterruptedException e) {
-            LOGGER.error(e.toString());
+            LOGGER.error(e);
         }
     }
 }

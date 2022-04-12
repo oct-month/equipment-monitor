@@ -38,8 +38,10 @@ public class SensorServer
         }
 
         if (temp != null) {
-            LOGGER.error("param-temp file write error.");
             this.rsServer = RSServer.Initiate(Config.port, temp.getAbsolutePath());
+        }
+        else {
+            LOGGER.error("param-temp file write error.");
         }
         this.sensorData = new SensorData();
     }

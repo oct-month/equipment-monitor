@@ -36,7 +36,7 @@
   </a-row>
 
   <a-row v-if="showEquipment" class="m-2" type="flex" justify="space-around" align="middle">
-    <a-col v-for="op in options" :key="op.title" :span="Math.floor(24/options.length)">
+    <a-col v-for="op in options1" :key="op.title" :span="Math.floor(24/options1.length)">
       <p>{{op.title}}</p>
       <v-chart class="chart r2" :option="op.option" autoresize/>
     </a-col>
@@ -112,7 +112,7 @@ function splitWrapAround(text) {
   let sps = []
   text.split('\n').forEach(t => {
     if (t) {
-      sps.push('t')
+      sps.push(t)
     }
   })
   return sps

@@ -46,7 +46,7 @@
     <!-- <b-card-group columns>
       <b-card
         v-for="equip in equipments"
-        :key="equip._id"
+        :key="equip.id"
         :title="equip.name"
         :img-src="config.imageBaseUrl+'/uploads/'+equip.image"
         :img-alt="equip.name"
@@ -58,7 +58,7 @@
       </b-card>
     </b-card-group> -->
 
-    <!-- <a-card bordered hoverable style="max-width: 20rem; display: inline-block;" v-for="equip in equipments" :key="equip._id" class="mb-2">
+    <!-- <a-card bordered hoverable style="max-width: 20rem; display: inline-block;" v-for="equip in equipments" :key="equip.id" class="mb-2">
       <img
         :src="config.imageBaseUrl+'/uploads/'+equip.image"
         :alt="equip.name"
@@ -201,13 +201,13 @@ export default {
               responseType: 'json'
             })
               .then((res) => {
-                let _id = res.data['_id']
+                let id = res.data['id']
                 // let token = res.data['token'] TODO token处理
                 let name = values['name']
                 let info = values['info']
                 let image = values['image']
                 this.equipments.unshift({
-                  _id,
+                  id,
                   name,
                   info,
                   image

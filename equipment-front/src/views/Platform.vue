@@ -392,9 +392,9 @@ export default {
             marker.on('mouseover', () => {
               infowindow.open(map, equipNew.position)
             })
-            marker.on('mouseout', () => {
-              infowindow.close()
-            })
+            // marker.on('mouseout', () => {
+            //   infowindow.close()
+            // })
             addM.push(marker)
           }
         })

@@ -5,7 +5,7 @@
         <img class="img-responsive center-block" height="24px" src="./assets/logo.png" alt="logo" srcset="">
         <span class="text-center text-success">装备健康监测系统</span>
       </div>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['2']">
+      <a-menu theme="dark" mode="inline"> <!-- :default-selected-keys="['2']"> -->
         <a-menu-item key="1">
           <router-link class="text-white" to="/equipment">
             <a-icon type="home" />
@@ -20,7 +20,7 @@
         </a-menu-item>
         <a-menu-item key="3">
           <router-link class="text-white" to="/monitoring">
-            <a-icon type="bar-chart" />
+            <a-icon type="video-camera" />
             <span class="nav-text">视频监控</span>
           </router-link>
         </a-menu-item>

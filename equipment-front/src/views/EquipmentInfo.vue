@@ -34,7 +34,7 @@
             </a-upload>
           </a-form-item>
           <a-form-item :wrapper-col="{ span: 1, offset: 1 }">
-            <a-button type="primary" html-type="submit">
+            <a-button type="primary" html-type="submit" :disabled="submitFlag">
               Submit
             </a-button>
           </a-form-item>
@@ -102,6 +102,7 @@ export default {
   data() {
     return {
       map: null,
+      geolocation: null,
       formLayout: 'horizontal',
       form: this.$form.createForm(this, {
         name: 'coordinated'
@@ -110,11 +111,30 @@ export default {
       fileList: [],
       imgPath: '',
       loading: false,
-      // equipments: [],
+      submitFlag: false,
+      equipments: [],
       config: config
     };
   },
   methods: {
+    handleGeoLocation(status, res) {
+      if (status === 'complete') {
+        // this.map.clearMap()
+        var latitude = res.position.lat
+        var longitude = res.position.lng
+        this.position = [longitude, latitude]
+        var content = [
+          `<div style="padding:0px"><p>装备位置为：[${longitude}, ${latitude}]</p></div>`
+        ]
+        var infoWindow = new AMap.InfoWindow({
+          content: content
+        })
+        infoWindow.open(this.map, new AMap.LngLat(longitude, latitude))
+      }
+      else {
+        console.error(res)
+      }
+    },
     initMap() {
       AMapLoader.load({
         key: config.mapKey,
@@ -138,7 +158,7 @@ export default {
           // this.map.addControl(new AMap.Scale())
           this.map.addControl(new AMap.MapType())
           // this.map.addControl(new AMap.Geocoder())
-          var geolocation = new AMap.Geolocation({
+          this.geolocation = new AMap.Geolocation({
             enableHighAccuracy: true, // 使用高精度定位
             timeout: 10,              // 超时 s
             maximumAge: 0,            // 定位结果缓存时间
@@ -151,26 +171,8 @@ export default {
             panToLocation: true,      // 移动到定位点
             zoomToAccuracy: true      // 自动重设视野范围
           })
-          this.map.addControl(geolocation)
-          geolocation.getCurrentPosition((status, res) => {
-            if (status === 'complete') {
-              // this.map.clearMap()
-              var latitude = res.position.lat
-              var longitude = res.position.lng
-              this.position = [longitude, latitude]
-              var content = [
-                `<div style="padding:0px"><p>装备位置为：[${longitude}, ${latitude}]</p></div>`
-              ]
-              var infoWindow = new AMap.InfoWindow({
-                content: content
-              })
-              infoWindow.open(this.map, new AMap.LngLat(longitude, latitude))
-            }
-            else {
-              console.error(res)
-            }
-          })
-
+          this.map.addControl(this.geolocation)
+          this.geolocation.getCurrentPosition(this.handleGeoLocation)
         })
         .catch((e) => {
           console.error(e)
@@ -185,6 +187,7 @@ export default {
         else if (this.imgPath) {
           values['image'] = this.imgPath
           if (this.position) {
+            this.submitFlag = true
             values['position'] = this.position
             axios({
               method: 'POST',
@@ -217,9 +220,13 @@ export default {
               .catch((err) => {
                 console.error(err)
               })
+              .finally(() => {
+                this.submitFlag = false
+              })
           }
           else {
-            this.$message.error('装备定位失败，请刷新页面重试')
+            this.$message.error('装备定位失败，请稍后重试')
+            this.geolocation.getCurrentPosition(this.handleGeoLocation)
           }
         }
         else {

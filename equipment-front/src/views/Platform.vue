@@ -381,6 +381,7 @@ export default {
               offset: new AMap.Pixel(0, -32)
             })
             marker.on('click', () => {
+              infowindow.open(map, equipNew.position)
               this.nowEquipment = {
                 name: equipNew.name,
                 image: config.imageBaseUrl + equipNew.image,
@@ -389,9 +390,9 @@ export default {
               this.showEquipment = true
               // TODO 展示监测信息
             })
-            marker.on('mouseover', () => {
-              infowindow.open(map, equipNew.position)
-            })
+            // marker.on('mouseover', () => {
+            //   infowindow.open(map, equipNew.position)
+            // })
             // marker.on('mouseout', () => {
             //   infowindow.close()
             // })

@@ -3,6 +3,7 @@ package cn.sun.sensor;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +12,7 @@ import com.jnrsmcu.sdk.netdevice.*;
 public class SensorServer
 {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final Gson gson = new Gson();
 
     private RSServer rsServer;
     private SensorData sensorData;
@@ -118,14 +120,15 @@ public class SensorServer
                             sensorData.setSo2(nd.getTem());
                             break;
                     }
-
-                    LOGGER.debug("实时数据->设备地址:" + data.getDeviceId()
-                            + "\t节点:" + nd.getNodeId() + "\t温度:" + nd.getTem()
-                            + "\t湿度:" + nd.getHum() + "\t经度:" + data.getLng()
-                            + "\t纬度:" + data.getLat() + "\t坐标类型:"
-                            + data.getCoordinateType() + "\t继电器状态:"
-                            + data.getRelayStatus());
+                    // LOGGER.debug("实时数据->设备地址:" + data.getDeviceId()
+                    //         + "\t节点:" + nd.getNodeId() + "\t温度:" + nd.getTem()
+                    //         + "\t湿度:" + nd.getHum() + "\t经度:" + data.getLng()
+                    //         + "\t纬度:" + data.getLat() + "\t坐标类型:"
+                    //         + data.getCoordinateType() + "\t继电器状态:"
+                    //         + data.getRelayStatus());
                 }
+
+                LOGGER.debug(gson.toJson(sensorData));
                 // TODO sensorData ==> Kafka
             }
 

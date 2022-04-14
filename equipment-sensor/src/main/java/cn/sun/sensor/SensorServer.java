@@ -3,7 +3,6 @@ package cn.sun.sensor;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
-import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +11,6 @@ import com.jnrsmcu.sdk.netdevice.*;
 public class SensorServer
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson gson = new Gson();
 
     private RSServer rsServer;
     private SensorData sensorData;
@@ -128,8 +126,7 @@ public class SensorServer
                     //         + data.getRelayStatus());
                 }
 
-                LOGGER.debug(gson.toJson(sensorData));
-                // TODO sensorData ==> Kafka
+                Producer.send(sensorData);
             }
 
             // 登录数据接收处理
@@ -183,5 +180,6 @@ public class SensorServer
     {
         addDataListener();
         rsServer.start();
+        Producer.close();
     }
 }

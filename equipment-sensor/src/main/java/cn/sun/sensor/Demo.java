@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Future;
@@ -82,7 +83,9 @@ public class Demo
     public static void main(String[] args)
     {
         try {
-            producer();
+            // producer();
+            Date date = new Date();
+            LOGGER.debug(date);
         }
         catch (Exception e) {
             LOGGER.error(e.getStackTrace());

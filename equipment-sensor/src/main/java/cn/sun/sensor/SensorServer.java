@@ -13,7 +13,6 @@ public class SensorServer
     private static final Logger LOGGER = LogManager.getLogger();
 
     private RSServer rsServer;
-    private SensorData sensorData;
 
     public SensorServer()
     {
@@ -43,19 +42,16 @@ public class SensorServer
         else {
             LOGGER.error("param-temp file write error.");
         }
-        this.sensorData = new SensorData();
     }
 
     public SensorServer(int port, String filePath)
     {
         this.rsServer = RSServer.Initiate(port, filePath);
-        this.sensorData = new SensorData();
     }
 
     public SensorServer(int port)
     {
         this.rsServer = RSServer.Initiate(port);
-        this.sensorData = new SensorData();
     }
 
     public void addDataListener()
@@ -89,6 +85,8 @@ public class SensorServer
 
             // 实时数据接收处理
             public void receiveRealtimeData(RealTimeData data) {
+                SensorData sensorData = new SensorData();
+                sensorData.setDeviceId("" + data.getDeviceId());
                 // 遍历节点数据。数据包括网络设备的数据以及各个节点数据。温湿度数据存放在节点数据中
                 sensorData.setLongitude(data.getLng());
                 sensorData.setLatitude(data.getLat());

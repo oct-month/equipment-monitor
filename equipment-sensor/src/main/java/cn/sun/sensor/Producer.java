@@ -29,26 +29,20 @@ public class Producer
     public static void send(SensorData sd)
     {
         String sdJson = gson.toJson(sd);
-        LOGGER.debug(sdJson);
         final ProducerRecord<String, String> record = new ProducerRecord<>(Config.kafkaTopic, Config.KafkaKey, sdJson);
-        Future future = producer.send(record, (md, e) -> {
+        producer.send(record, (md, e) -> {
             if (e != null) {
                 LOGGER.error(e.getStackTrace());
             }
             else {
-                producer.flush();
+                LOGGER.debug("sended: --> " + sdJson);
             }
         });
-        try {
-            future.get();
-        }
-        catch (Exception e) {
-            LOGGER.error(e.getStackTrace());
-        }
     }
 
     public static void close()
     {
+        producer.flush();
         producer.close();
     }
 }

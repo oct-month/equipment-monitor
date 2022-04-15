@@ -17,6 +17,8 @@ services:
     image: bitnami/kafka:3.1.0
     container_name: equipment-kafka
     restart: on-failure
+    volumes:
+      - ./equipment-kafka:/bitnami/kafka
     environment:
       - KAFKA_BROKER_ID=1
       - ALLOW_PLAINTEXT_LISTENER=yes
@@ -82,6 +84,7 @@ services:
     depends_on:
       - equipment-back
       - equipment-image
+      - equipment-sensor
   
   # equipment-nginx:
   #   image: nginx:stable-alpine

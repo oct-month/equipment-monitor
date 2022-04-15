@@ -1,6 +1,7 @@
 package cn.sun.sensor;
 
 
+import com.google.gson.Gson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -38,7 +39,7 @@ public class Demo
         config.put("retries", 3);
 
         KafkaProducer producer = new KafkaProducer<>(config);
-        final ProducerRecord<String, String> record = new ProducerRecord<>(topic, "key", "value");
+        final ProducerRecord<String, String> record = new ProducerRecord<>(topic, "key", new Gson().toJson(new SensorData()));
         Future<RecordMetadata> future = producer.send(record, (md, ex) -> {
             if (ex != null) {
                 LOGGER.error(ex.getStackTrace());
@@ -47,9 +48,9 @@ public class Demo
                 LOGGER.debug("Sent msg to " + md.partition() + " with offset " + md.offset() + " at " + md.timestamp());;
             }
             producer.flush();
-            producer.close();
         });
         future.get();
+        producer.close();
     }
 
     public static void consumer() throws UnknownHostException
@@ -81,7 +82,7 @@ public class Demo
     public static void main(String[] args)
     {
         try {
-            consumer();
+            producer();
         }
         catch (Exception e) {
             LOGGER.error(e.getStackTrace());

@@ -26,7 +26,20 @@ function registerRoute(app) {
         server: server,
         path: '/api/sensordata'
     })
-    wss.on('connection', sensorDataController.getSensorData)
+    let wsFlag = true
+    wss.on('connection', (ws) => {
+        // ws.on('close', (e) => {
+        //     if (wss.clients.size === 0) {
+        //         sensorDataController.stopConsumer()
+        //         wsFlag = true
+        //     }
+        // })
+        if (wsFlag) {
+            wsFlag = false
+            sensorDataController.getSensorData(wss.clients)
+        }
+    })
+    // wss.on('connection', sensorDataController.getSensorData)
 
     return server
 }

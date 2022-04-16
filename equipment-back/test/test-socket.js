@@ -1,16 +1,19 @@
 const { WebSocket } = require('ws')
 
-const ws = new WebSocket('ws://localhost:8081/api/sensordata')
+const ws = new WebSocket('ws://localhost:8081/api/sensordata', {
+    timeout: 10
+})
 
 ws.on('open', () =>{
-    ws.send('ok')
+    console.log('客户端open')
 })
 
 ws.on('message', (msg) => {
-    console.log('客户端：' + msg);
+    console.log('客户端：' + msg)
 })
 
-ws.on('close', () => {
+ws.on('close', (e) => {
+    console.log(e)
     ws.close()
 })
 

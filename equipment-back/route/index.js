@@ -39,7 +39,6 @@ function registerRoute(app) {
             sensorDataController.getSensorData(wss.clients)
         }
     })
-    // wss.on('connection', sensorDataController.getSensorData)
 
     return server
 }

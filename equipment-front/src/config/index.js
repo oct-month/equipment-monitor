@@ -4,7 +4,8 @@
 // if (process.env.NODE_ENV !== 'product') {
 //     config = {
 //         backBaseUrl: `http://${host}:8081`,
-//         imageBaseUrl: `http://${host}:8082`
+//         imageBaseUrl: `http://${host}:8082`,
+//         wsBaseUrl: 'wss://www.ablocker.top:8080'
 //     }
 // }
 // else {
@@ -19,7 +20,7 @@
 var config = {
     backBaseUrl: '',
     imageBaseUrl: '',
-    wsBaseUrl: 'ws://www.ablocker.top',
+    wsBaseUrl: '',
     mapKey: 'fb10d68786e5060551e53489063e8b34'
 }
 

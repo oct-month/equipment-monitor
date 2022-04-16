@@ -4,7 +4,6 @@ const path = require('path')
 const zlib = require('zlib')
 
 // const isProduction = process.env.NODE_ENV === 'production'
-var host = '172.22.95.10'
 
 module.exports = {
     publicPath: './',
@@ -16,14 +15,8 @@ module.exports = {
         open: false,
         hotOnly: true,
         proxy: {
-            '/api/image': {
-                target: `http://${host}:8082`,
-                ws: true,
-                secure: false,
-                changeOrigin: true
-            },
             '/api': {
-                target: `http://${host}:8081`,    // 后端域名
+                target: 'https://www.ablocker.top:8080',
                 ws: true,
                 secure: false,
                 changeOrigin: true

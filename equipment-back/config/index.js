@@ -7,6 +7,9 @@ module.exports = {
     dbUrl: process.env.NODE_ENV === 'product' ? 'mongodb://equipment-mongodb:27017' : 'mongodb://127.0.0.1:27017',
     // 数据库名称
     dbName: 'monitor',
+    // kafka
+    kafkaServers: ['equipment-kafka:9092'],
+    kafkaTopic: 'sensor',
     // 服务端口
     serverPort: 8081,
     privateKey: fs.readFileSync(path.join(__dirname, '../keys/rsa_private_key.pem'), 'utf-8') ,

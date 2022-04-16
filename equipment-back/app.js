@@ -5,7 +5,7 @@ const express = require('express')
 
 const logger = require('./utils/logger')
 const config = require('./config')
-const router = require('./route')
+const registerRoute = require('./route')
 
 
 // var denv = dotenv.config({
@@ -62,9 +62,9 @@ if (process.env.NODE_ENV !== 'product') {
     })
 }
 
-app.use('/', router)
+// 注册路由
+server = registerRoute(app)
 
-
-app.listen(config.serverPort, () => {
+server.listen(config.serverPort, () => {
     logger.debug(`Server start on http://127.0.0.1:${config.serverPort}`)
 })

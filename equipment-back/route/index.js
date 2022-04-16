@@ -1,18 +1,35 @@
 const express = require('express')
+const http = require('http')
+const { WebSocket } =require('ws')
 
 const equipmentController = require('../controller/equipment-controller')
 const monitoringController = require('../controller/monitoring-controller')
+const sensorDataController = require('../controller/sensordata-controller')
 // const logger = require('../utils/logger')
 
 
-var router = express.Router()
+/**
+ * 
+ * @param {express.Express} app 
+ */
+function registerRoute(app) {
+    var router = express.Router()
+    router.get('/api/equipment', equipmentController.getEquipments)
+    router.get('/api/equipment/position', equipmentController.getEquipmentsByPosition)
+    router.post('/api/equipment', equipmentController.postEquipment)
+    router.get('/api/monitoring', monitoringController.getMonitorings)
+    router.post('/api/monitoring', monitoringController.postMonitoring)
+    app.use('/', router)
 
-router.get('/api/equipment', equipmentController.getEquipments)
-router.get('/api/equipment/position', equipmentController.getEquipmentsByPosition)
-router.post('/api/equipment', equipmentController.postEquipment)
+    const server = http.createServer(app)
+    const wss = new WebSocket.Server({
+        server: server,
+        path: '/api/sensordata'
+    })
+    wss.on('connection', sensorDataController.getSensorData)
 
-router.get('/api/monitoring', monitoringController.getMonitorings)
-router.post('/api/monitoring', monitoringController.postMonitoring)
+    return server
+}
 
 // router.post('/api/login', (req, res, next) => {
 //     var username = req.body['username']
@@ -38,4 +55,4 @@ router.post('/api/monitoring', monitoringController.postMonitoring)
 //     }
 // })
 
-module.exports = router
+module.exports = registerRoute

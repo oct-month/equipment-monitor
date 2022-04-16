@@ -20,6 +20,12 @@ module.exports = {
                 ws: true,
                 secure: false,
                 changeOrigin: true
+            },
+            '/uploads': {
+                target: 'https://www.ablocker.top:8080',
+                ws: true,
+                secure: false,
+                changeOrigin: true
             }
         }
     },

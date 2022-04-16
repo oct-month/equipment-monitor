@@ -20,7 +20,7 @@
 var config = {
     backBaseUrl: '',
     imageBaseUrl: '',
-    wsBaseUrl: '',
+    wsBaseUrl: 'wss://www.ablocker.top:8080',
     mapKey: 'fb10d68786e5060551e53489063e8b34'
 }
 

@@ -35,12 +35,14 @@
     </a-col>
   </a-row>
 
-  <a-row v-if="showEquipment" class="m-2" type="flex" justify="space-around" align="middle">
-    <a-col v-for="op in options" :key="op.title" :span="Math.floor(24/options.length)">
-      <p>{{op.title}}</p>
-      <v-chart class="chart r2" :option="op.option" autoresize/>
-    </a-col>
-  </a-row>
+  <div v-if="showEquipment">
+    <a-row v-for="ops in optionsSplit" :key="ops[0].title" class="m-2" type="flex" justify="space-around" align="middle">
+      <a-col v-for="op in ops" :key="op.title" :span="Math.floor(24/ops.length)">
+        <p>{{op.title}}</p>
+        <v-chart class="chart r2" :option="op.option" autoresize/>
+      </a-col>
+    </a-row>
+  </div>
 </div>
 
   <!-- <div>
@@ -51,7 +53,7 @@
 
 <style scoped>
 .r1 {
-  height: 600px;
+  height: 700px;
 }
 
 .r2 {
@@ -94,15 +96,15 @@ function sleep(s) {
   return new Promise((resolve) => setTimeout(resolve, s * 1000))
 }
 
-/**
- * @param {String} content
- * @returns {String}
- */
-function encodeHtml(content) {
-  let div = document.createElement('div')
-  div.append(content)
-  return div.innerHTML
-}
+// /**
+//  * @param {String} content
+//  * @returns {String}
+//  */
+// function encodeHtml(content) {
+//   let div = document.createElement('div')
+//   div.append(content)
+//   return div.innerHTML
+// }
 
 /**
  * @param {String} text
@@ -131,219 +133,93 @@ export default {
       lastMapMoveDate: new Date(),
       showEquipment: false,
       nowEquipment: {},
-      options: [],
-      options1: [
-        {
-          title: '温度',
+      sensorData: []
+    }
+  },
+  computed: {
+    options() {
+      let sds = this.sensorData.filter((v) => v.id === '40191783')//this.nowEquipment.id)
+      let X = []
+      let Y = {}
+      sds.forEach((sd) => {
+        for(let k in sd) {
+          if (k != 'id') {
+            if (k == 'date') {
+              X.push(sd[k])
+            }
+            else if (k == 'longitude') {
+              // TODO
+            }
+            else if (k == 'latitude') {
+              // TODO
+            }
+            else {
+              if (k in Y) {
+                Y[k].push(sd[k])
+              }
+              else {
+                Y[k] = [sd[k]]
+              }
+            }
+          }
+        }
+      })
+      let ops = []
+      for (let k in Y) {
+        let muban = {
+          title: k,
           option: {
             backgroundColor: '#333',
             xAxis: {
               type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: [34.4, 34.4, 35.7, 36.3, 37.1, 37.2],
-                type: 'line',
-                label: {
-                  show: true,
-                  position: 'top',
-                  textStyle: {
-                    fontSize: 20
-                  }
+              data: X,
+              axisLabel: {
+                interale: 0,
+                rotate: -40,
+                formatter: function (dt) {
+                  let t_date = new Date(dt)
+                  return [t_date.getHours(), t_date.getMinutes(), t_date.getSeconds()].join(':')
                 }
               }
-            ]
-          }
-        },
-        {
-          title: '湿度',
-          option: {
-            backgroundColor: '#222',
-            xAxis: {
-              type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
             },
             yAxis: {
               type: 'value'
             },
             series: [
               {
-                data: [0.67, 0.67, 0.67, 0.68, 0.68, 0.67],
+                data: Y[k],
                 type: 'line',
                 label: {
                   show: true,
                   position: 'top',
                   textStyle: {
-                    fontSize: 20
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          title: '电压',
-          option: {
-            backgroundColor: '#111',
-            xAxis: {
-              type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: [15.4, 15.5, 15.6, 15.5, 15.4, 15.4],
-                type: 'line',
-                label: {
-                  show: true,
-                  position: 'top',
-                  textStyle: {
-                    fontSize: 20
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          title: '电流',
-          option: {
-            backgroundColor: '#000',
-            xAxis: {
-              type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: [3.2, 3.21, 3.23, 3.21, 3.19, 3.1],
-                type: 'line',
-                label: {
-                  show: true,
-                  position: 'top',
-                  textStyle: {
-                    fontSize: 20
+                    fontSize: 15
+                  },
+                  formatter: function (v) {
+                    if (v.dataIndex % 2 != 0) {
+                      return v.data
+                    }
+                    else {
+                      return ''
+                    }
                   }
                 }
               }
             ]
           }
         }
-      ],
-      options2: [
-        {
-          title: '温度',
-          option: {
-            backgroundColor: '#333',
-            xAxis: {
-              type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: [36.4, 36.4, 37.7, 33.3, 35.1, 32.2],
-                type: 'line',
-                label: {
-                  show: true,
-                  position: 'top',
-                  textStyle: {
-                    fontSize: 20
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          title: '湿度',
-          option: {
-            backgroundColor: '#222',
-            xAxis: {
-              type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: [0.64, 0.67, 0.67, 0.68, 0.68, 0.67],
-                type: 'line',
-                label: {
-                  show: true,
-                  position: 'top',
-                  textStyle: {
-                    fontSize: 20
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          title: '电压',
-          option: {
-            backgroundColor: '#111',
-            xAxis: {
-              type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: [16.4, 16.5, 16.6, 15.9, 15.4, 15.4],
-                type: 'line',
-                label: {
-                  show: true,
-                  position: 'top',
-                  textStyle: {
-                    fontSize: 20
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          title: '电流',
-          option: {
-            backgroundColor: '#000',
-            xAxis: {
-              type: 'category',
-              data: ['20:10', '20:20', '20:30', '20:40', '20:50', '21:00']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: [4.2, 4.21, 4.24, 4.21, 4.19, 4.1],
-                type: 'line',
-                label: {
-                  show: true,
-                  position: 'top',
-                  textStyle: {
-                    fontSize: 20
-                  }
-                }
-              }
-            ]
-          }
-        }
-      ]
+        ops.push(muban)
+      }
+      return ops
+    },
+    optionsSplit() {
+      let options = this.options
+      let l = options.length
+      let res = []
+      for (let i = 0; i < l; i += 3) {
+        res.push(options.slice(i, i + 3))
+      }
+      return res
     }
   },
   watch: {
@@ -372,26 +248,36 @@ export default {
                 id: equipNew.id
               }
             })
-            let content = [
-              `<h5>${encodeHtml(equipNew.name)}</h5>`,
-              `<p>${encodeHtml(equipNew.info)}</p>`
-            ]
-            let infowindow = new AMap.InfoWindow({
-              content: content.join(''),
-              offset: new AMap.Pixel(0, -32)
-            })
+            // let content = [
+            //   `<h5>${encodeHtml(equipNew.name)}</h5>`,
+            //   `<p>${encodeHtml(equipNew.info)}</p>`
+            // ]
+            // let infowindow = new AMap.InfoWindow({
+            //   content: content.join(''),
+            //   offset: new AMap.Pixel(0, -32)
+            // })
+            let ws = null
             marker.on('click', () => {
-              infowindow.open(map, equipNew.position)
+              // infowindow.open(map, equipNew.position)
               this.nowEquipment = {
+                id: equipNew.id,
                 name: equipNew.name,
                 image: config.imageBaseUrl + equipNew.image,
-                infos: splitWrapAround(equipNew.info)
+                infos: splitWrapAround(equipNew.info),
+                position: equipNew.position
               }
               this.showEquipment = true
-              // TODO 展示监测信息
-              let ws = new WebSocket(config.wsBaseUrl + '/api/sensordata')
+              // 展示监测信息
+              if (ws != null) {
+                ws.close()
+              }
+              ws = new WebSocket(config.wsBaseUrl + '/api/sensordata')
               ws.onmessage = (evt) => {
-                console.log(evt.data)
+                let sd = JSON.parse(evt.data)
+                this.sensorData.push(sd)
+                if (sd.longitude != 0 && sd.latitude != 0) {
+                  marker.position = [sd.longitude, sd.latitude]
+                }
               }
             })
             // marker.on('mouseover', () => {

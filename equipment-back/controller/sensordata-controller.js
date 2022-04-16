@@ -13,7 +13,7 @@ const kafka = new Kafka({
 const consumer = kafka.consumer({
     groupId: 'foo'
 })
-const consumerConnected = false
+var consumerConnected = false
 
 // TODO init 吧，避免重入
 /**

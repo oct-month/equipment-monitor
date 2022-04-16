@@ -9,3 +9,11 @@ ws.on('open', () =>{
 ws.on('message', (msg) => {
     console.log('客户端：' + msg);
 })
+
+ws.on('close', () => {
+    ws.close()
+})
+
+ws.on('error', (err) => {
+    console.error(err)
+})

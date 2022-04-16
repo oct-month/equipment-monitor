@@ -32,17 +32,19 @@ async function init() {
  */
 async function getSensorData(ws) {
     await init()
-    await consumer.run({
-        eachMessage: async ({ topic, partition, message}) => {
-            msg = message.value.toString()
-            // sensorData = JSON.parse(msg)
-            // console.log(sensorData)
-            ws.send(msg, (err) => {
-                if (err) {
-                    logger.error(err)
-                }
-            })
-        }
+    ws.on('open', () => {
+        await consumer.run({
+            eachMessage: async ({ topic, partition, message}) => {
+                msg = message.value.toString()
+                // sensorData = JSON.parse(msg)
+                // console.log(sensorData)
+                ws.send(msg, (err) => {
+                    if (err) {
+                        logger.error(err)
+                    }
+                })
+            }
+        })
     })
 }
 

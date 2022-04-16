@@ -19,6 +19,7 @@
 var config = {
     backBaseUrl: '',
     imageBaseUrl: '',
+    wsBaseUrl: 'ws://www.ablocker.top',
     mapKey: 'fb10d68786e5060551e53489063e8b34'
 }
 

@@ -36,7 +36,7 @@
   </a-row>
 
   <a-row v-if="showEquipment" class="m-2" type="flex" justify="space-around" align="middle">
-    <a-col v-for="op in options1" :key="op.title" :span="Math.floor(24/options1.length)">
+    <a-col v-for="op in options" :key="op.title" :span="Math.floor(24/options.length)">
       <p>{{op.title}}</p>
       <v-chart class="chart r2" :option="op.option" autoresize/>
     </a-col>
@@ -389,6 +389,10 @@ export default {
               }
               this.showEquipment = true
               // TODO 展示监测信息
+              let ws = new WebSocket(config.wsBaseUrl + '/api/sensordata')
+              ws.onmessage = (evt) => {
+                console.log(evt.data)
+              }
             })
             // marker.on('mouseover', () => {
             //   infowindow.open(map, equipNew.position)

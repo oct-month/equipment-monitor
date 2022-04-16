@@ -101,6 +101,7 @@ export default {
   name: 'EquipmentInfo',
   data() {
     return {
+      AMap: null,
       map: null,
       geolocation: null,
       formLayout: 'horizontal',
@@ -126,10 +127,10 @@ export default {
         var content = [
           `<div style="padding:0px"><p>装备位置为：[${longitude}, ${latitude}]</p></div>`
         ]
-        var infoWindow = new AMap.InfoWindow({
+        var infoWindow = new this.AMap.InfoWindow({
           content: content
         })
-        infoWindow.open(this.map, new AMap.LngLat(longitude, latitude))
+        infoWindow.open(this.map, new this.AMap.LngLat(longitude, latitude))
       }
       else {
         console.error(res)
@@ -148,6 +149,7 @@ export default {
         ]
       })
         .then((AMap) => {
+          this.AMap = AMap
           this.map = new AMap.Map('map', {
             resizeEnable: true,
             viewMode: '2D',

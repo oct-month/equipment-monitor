@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class SensorData
 {
-    private String deviceId;
+    private String id;
     private Date date;
     private float temperature;      // 温度
     private float humidity;         // 湿度

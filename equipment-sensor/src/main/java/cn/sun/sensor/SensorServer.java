@@ -86,7 +86,7 @@ public class SensorServer
             // 实时数据接收处理
             public void receiveRealtimeData(RealTimeData data) {
                 SensorData sensorData = new SensorData();
-                sensorData.setDeviceId("" + data.getDeviceId());
+                sensorData.setId("" + data.getDeviceId());
                 // 遍历节点数据。数据包括网络设备的数据以及各个节点数据。温湿度数据存放在节点数据中
                 sensorData.setLongitude(data.getLng());
                 sensorData.setLatitude(data.getLat());

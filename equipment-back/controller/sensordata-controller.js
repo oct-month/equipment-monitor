@@ -47,7 +47,7 @@ async function stopConsumer() {
  * @param {Set<WebSocket>} wsClients
  */
 async function getSensorData(wsClients) {
-    consumer = await getConsumer()
+    let consumer = await getConsumer()
     await consumer.run({
         autoCommitInterval: 5000,
         eachMessage: async ({ topic, partition, message}) => {

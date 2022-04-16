@@ -96,8 +96,6 @@ public class SensorServer
                         case 1: // PM节点
                             sensorData.setPm10(nd.getTem() * 10);
                             sensorData.setPm25(nd.getHum() * 10);
-                            sensorData.setLatitude(nd.getLat());
-                            sensorData.setLongitude(nd.getLng());
                             break;
                         case 2:     // 温湿度节点
                             sensorData.setTemperature(nd.getTem());

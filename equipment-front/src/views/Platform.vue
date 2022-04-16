@@ -196,6 +196,7 @@ export default {
                     fontSize: 15
                   },
                   formatter: function (v) {
+                    // 间隔一个显示
                     if (v.dataIndex % 2 != 0) {
                       return v.data
                     }

@@ -32,7 +32,7 @@ async function init() {
  */
 async function getSensorData(ws) {
     await init()
-    ws.on('open', () => {
+    ws.on('open', async () => {
         await consumer.run({
             eachMessage: async ({ topic, partition, message}) => {
                 msg = message.value.toString()

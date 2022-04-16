@@ -3,7 +3,7 @@ const { WebSocket } = require('ws')
 const ws = new WebSocket('ws://localhost:8081/api/sensordata')
 
 ws.on('open', () =>{
-    // ws.send('你好')
+    ws.send('ok')
 })
 
 ws.on('message', (msg) => {

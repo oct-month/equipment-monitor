@@ -18,7 +18,7 @@ services:
     container_name: equipment-kafka
     restart: on-failure
     volumes:
-      - ./equipment-kafka:/bitnami/kafka
+      - ./kafka:/bitnami/kafka
     environment:
       - KAFKA_BROKER_ID=1
       - ALLOW_PLAINTEXT_LISTENER=yes

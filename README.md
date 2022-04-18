@@ -5,6 +5,7 @@
 - 前端 `equipment-front` 使用 `vue` + `bootstrap` + `ant-design`，地图采用[`高德地图API`](https://lbs.amap.com/api/jsapi-v2/guide/webcli/map-vue1)
 - 后端 `equipment-back` 使用 `express` + `mongodb`
 - 图床 `equipment-image` 使用 `express` + `multer`
+- 传感器二次开发 `equipment-sensor`
 
 ## 项目框架
 
@@ -14,6 +15,10 @@
 ## 软件架构
 
 ![架构](./doc/软件架构.png)
+
+## 组网
+
+![组网](./doc/net.png)
 
 ## 运行
 

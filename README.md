@@ -33,6 +33,6 @@ sh gen-key.sh
 3. 部署
 
 ```sh
-chmod a+rwx -R equipment-kafka
+chmod a+rwx -R ./kafka
 docker-compose up -d --build
 ```

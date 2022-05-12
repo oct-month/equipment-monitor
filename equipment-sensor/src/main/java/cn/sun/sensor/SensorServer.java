@@ -88,8 +88,10 @@ public class SensorServer
                 SensorData sensorData = new SensorData();
                 sensorData.setId("" + data.getDeviceId());
                 // 遍历节点数据。数据包括网络设备的数据以及各个节点数据。温湿度数据存放在节点数据中
-                sensorData.setLongitude(data.getLng());
-                sensorData.setLatitude(data.getLat());
+                // sensorData.setLongitude(data.getLng());
+                // sensorData.setLatitude(data.getLat());
+                sensorData.setLongitude(108.838959);
+                sensorData.setLatitude(34.131087);
 
                 for (NodeData nd : data.getNodeList()) {
                     switch (nd.getNodeId()) {
